@@ -1,0 +1,178 @@
+#[derive(Debug)]
+pub enum Kinds {
+    Null,
+    OpeningParam,
+    ClosingParam,
+    Number,
+    Word,
+}
+#[derive(Debug)]
+pub struct Token {
+    pub consumes: usize,
+    pub kind: Kinds,
+    pub value: Vec<char>,
+}
+
+fn tokenize_character(kind: Kinds, character: char, input: &str) -> Token {
+    return match input.chars().next() {
+        Some(x) if x == character => Token {
+            consumes: 1,
+            kind: kind,
+            value: vec![x],
+        },
+        _ => Token {
+            consumes: 0,
+            kind: Kinds::Null,
+            value: vec![],
+        },
+    };
+}
+
+fn tokenize_whitespace(input: &str) -> Token {
+    return tokenize_character(Kinds::Null, ' ', input);
+}
+
+fn tokenize_opening_param(input: &str) -> Token {
+    return tokenize_character(Kinds::OpeningParam, '(', input);
+}
+
+fn tokenize_closing_param(input: &str) -> Token {
+    return tokenize_character(Kinds::ClosingParam, ')', input);
+}
+
+fn tokenize_number(input: &str) -> Token {
+    let mut acc = vec![];
+    let mut chars = input.chars();
+
+    return tokenize_number_r(&mut acc, &mut chars);
+}
+
+fn tokenize_number_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) -> Token {
+    return match input.next() {
+        None => Token {
+            consumes: 0,
+            kind: Kinds::Null,
+            value: vec![],
+        },
+        Some(x) => match x {
+            '0'..='9' => {
+                acc.push(x);
+                tokenize_number_r(acc, input)
+            }
+            _ if { acc.len() > 0 } => Token {
+                consumes: acc.len(),
+                kind: Kinds::Number,
+                value: acc.to_vec(),
+            },
+            _ => Token {
+                consumes: 0,
+                kind: Kinds::Null,
+                value: vec![],
+            },
+        },
+    };
+}
+
+fn tokenize_string(input: &str) -> Token {
+    let mut acc = vec![];
+    let mut chars = input.chars();
+
+    return tokenize_string_r(&mut acc, &mut chars);
+}
+
+fn tokenize_string_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) -> Token {
+    return match input.next() {
+        None if { acc.len() > 0 } => {
+            println!("{:?}", acc);
+            panic!("Unterminated String! ...I'll be back...");
+        }
+        None => Token {
+            consumes: 0,
+            kind: Kinds::Null,
+            value: vec![],
+        },
+        Some('"') if { acc.len() > 0 } => {
+            acc.push('"');
+            Token {
+                consumes: acc.len(),
+                kind: Kinds::Word,
+                value: acc.to_vec(),
+            }
+        }
+        Some('"') => {
+            acc.push('"');
+            tokenize_string_r(acc, input)
+        }
+        Some(x) if { acc.len() > 0 } => {
+            acc.push(x);
+            tokenize_string_r(acc, input)
+        }
+        _ => Token {
+            consumes: 0,
+            kind: Kinds::Null,
+            value: vec![],
+        },
+    };
+}
+
+fn tokenize_word(input: &str) -> Token {
+    let mut acc = vec![];
+    let mut chars = input.chars();
+
+    return tokenize_word_r(&mut acc, &mut chars);
+}
+
+fn tokenize_word_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) -> Token {
+    return match input.next() {
+        None => Token {
+            consumes: 0,
+            kind: Kinds::Null,
+            value: vec![],
+        },
+        Some(x) => match x {
+            'a'..='z' => {
+                acc.push(x);
+                tokenize_word_r(acc, input)
+            }
+            _ if { acc.len() > 0 } => Token {
+                consumes: acc.len(),
+                kind: Kinds::Word,
+                value: acc.to_vec(),
+            },
+            _ => Token {
+                consumes: 0,
+                kind: Kinds::Null,
+                value: vec![],
+            },
+        },
+    };
+}
+
+pub fn tokenize(full_prg: &str) -> Vec<Token> {
+    let mut chars = full_prg.chars();
+    let mut acc = vec![];
+    let functions: Vec<&dyn Fn(&str) -> Token> = vec![
+        &tokenize_whitespace,
+        &tokenize_opening_param,
+        &tokenize_closing_param,
+        &tokenize_string,
+        &tokenize_number,
+        &tokenize_word,
+    ];
+
+    // TODO: How to know when there are no chars left ... ?
+    for _a in 0..full_prg.len() {
+        for f in &functions {
+            let token = f(chars.as_str());
+            for _x in 0..token.consumes {
+                chars.next();
+            }
+
+            match token.kind {
+                Kinds::Null => continue,
+                _ => acc.push(token),
+            }
+        }
+    }
+    return acc;
+}
