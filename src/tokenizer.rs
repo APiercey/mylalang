@@ -14,6 +14,43 @@ pub struct Token {
     pub value: Vec<char>,
 }
 
+fn tokenize_comment(input: &str) -> Token {
+    let mut acc = vec![];
+    let mut chars = input.chars();
+
+    return tokenize_comment_r(&mut acc, &mut chars);
+}
+
+fn tokenize_comment_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) -> Token {
+    return match input.next() {
+        None => Token {
+            consumes: 0,
+            kind: Kinds::Null,
+            value: vec![],
+        },
+        Some(x) => match x {
+            ';' if { acc.len() == 0 } => {
+                acc.push(x);
+                tokenize_comment_r(acc, input)
+            }
+            '\n' if { acc.len() > 0 } => Token {
+                consumes: acc.len(),
+                kind: Kinds::Null,
+                value: vec![],
+            },
+            _ if { acc.len() > 0 } => {
+                acc.push(x);
+                tokenize_comment_r(acc, input)
+            }
+            _ => Token {
+                consumes: 0,
+                kind: Kinds::Null,
+                value: vec![],
+            },
+        },
+    };
+}
+
 fn tokenize_character(kind: Kinds, character: char, input: &str) -> Token {
     return match input.chars().next() {
         Some(x) if x == character => Token {
@@ -157,6 +194,7 @@ pub fn tokenize(full_prg: &str) -> Vec<Token> {
     let mut chars = full_prg.chars();
     let mut acc = vec![];
     let functions: Vec<&dyn Fn(&str) -> Token> = vec![
+        &tokenize_comment,
         &tokenize_whitespace,
         &tokenize_new_line,
         &tokenize_opening_param,
