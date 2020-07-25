@@ -1,1 +1,5 @@
-(add 10 12.5)
+; Let's look at the operators
+(add                      ; Add!
+  (subtract 5 10)         ; Subtract!!
+  (multiply               ; Multiply :) 
+    (divide 2 10 ) 45))   ; Divide...
