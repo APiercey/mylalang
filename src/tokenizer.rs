@@ -6,6 +6,7 @@ pub enum Kinds {
     Number,
     Word,
 }
+
 #[derive(Debug)]
 pub struct Token {
     pub consumes: usize,
@@ -30,6 +31,10 @@ fn tokenize_character(kind: Kinds, character: char, input: &str) -> Token {
 
 fn tokenize_whitespace(input: &str) -> Token {
     return tokenize_character(Kinds::Null, ' ', input);
+}
+
+fn tokenize_new_line(input: &str) -> Token {
+    return tokenize_character(Kinds::Null, '\n', input);
 }
 
 fn tokenize_opening_param(input: &str) -> Token {
@@ -153,6 +158,7 @@ pub fn tokenize(full_prg: &str) -> Vec<Token> {
     let mut acc = vec![];
     let functions: Vec<&dyn Fn(&str) -> Token> = vec![
         &tokenize_whitespace,
+        &tokenize_new_line,
         &tokenize_opening_param,
         &tokenize_closing_param,
         &tokenize_string,

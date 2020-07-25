@@ -41,8 +41,10 @@ fn parse_number(token: &tokenizer::Token) -> Node {
 }
 
 fn parse_string(token: &tokenizer::Token) -> Node {
+    let string_slice = &token.value[1..token.value.len() - 1];
+
     return Node::StringLiteral(StringLiteral {
-        value: token.value.iter().cloned().collect::<String>(),
+        value: string_slice.iter().cloned().collect::<String>(),
     });
 }
 
