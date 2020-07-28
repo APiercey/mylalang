@@ -5,7 +5,10 @@ enum Types {
     Integer(isize),
     Float(f64),
     String(String),
+    Func(fn(VArgs) -> Types),
 }
+
+type VArgs = Vec<Types>;
 
 fn add(first: Types, second: Types) -> Types {
     match (first, second) {
@@ -70,6 +73,7 @@ pub fn execute_tree(ast: parser::AbstractSyntaxTree) {
             Types::Integer(n) => println!("{}", n),
             Types::Float(n) => println!("{}", n),
             Types::String(n) => println!("{}", n),
+            Types::Func(_) => println!("not imp"),
         };
     }
 }

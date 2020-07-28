@@ -1,4 +1,5 @@
 use super::tokenizer;
+use crate::types::{vec_to_list, Types};
 
 #[derive(Debug)]
 pub struct AbstractSyntaxTree {
@@ -28,46 +29,45 @@ pub enum Node {
     CallExpression(CallExpression),
 }
 
-fn parse_number(token: &tokenizer::Token) -> Node {
-    return Node::NumberLiteral(NumberLiteral {
-        value: token
+fn parse_number(token: &tokenizer::Token) -> Types {
+    return Types::Integer(
+        token
             .value
             .iter()
             .cloned()
             .collect::<String>()
             .parse::<isize>()
             .unwrap(),
-    });
+    );
 }
 
-fn parse_string(token: &tokenizer::Token) -> Node {
+fn parse_word(token: &tokenizer::Token) -> Types {
+    return Types::Word(token.value.iter().cloned().collect::<String>());
+}
+
+fn parse_string(token: &tokenizer::Token) -> Types {
     let string_slice = &token.value[1..token.value.len() - 1];
 
-    return Node::StringLiteral(StringLiteral {
-        value: string_slice.iter().cloned().collect::<String>(),
-    });
+    return Types::String(string_slice.iter().cloned().collect::<String>());
 }
 
 fn parse_expression(
     input: &mut std::slice::Iter<tokenizer::Token>,
     token: &tokenizer::Token,
-) -> Node {
-    let mut call_expression = CallExpression {
-        name: token.value.iter().cloned().collect::<String>(),
-        params: vec![],
-    };
+) -> Types {
+    let mut list = vec![parse_word(&token)];
 
     while let Some(next) = input.next() {
         match next.kind {
             tokenizer::Kinds::ClosingParam => break,
-            _ => call_expression.params.push(parse_token(input, &next)),
+            _ => list.push(parse_token(input, &next)),
         }
     }
 
-    return Node::CallExpression(call_expression);
+    return vec_to_list(list);
 }
 
-fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer::Token) -> Node {
+fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer::Token) -> Types {
     match token.kind {
         tokenizer::Kinds::Number => parse_number(&token),
         tokenizer::Kinds::Word => parse_string(&token),
@@ -79,13 +79,11 @@ fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer
     }
 }
 
-pub fn parse(tokens: &mut std::vec::Vec<tokenizer::Token>) -> AbstractSyntaxTree {
-    let mut ast = AbstractSyntaxTree { body: vec![] };
+pub fn parse(tokens: &mut std::vec::Vec<tokenizer::Token>) -> Types {
     let mut t_iterable = tokens.iter();
 
-    while let Some(next) = t_iterable.next() {
-        ast.body.push(parse_token(&mut t_iterable, &next))
-    }
-
-    return ast;
+    return match t_iterable.next() {
+        Some(next) => parse_token(&mut t_iterable, &next),
+        None => panic!("NO INPUT!"),
+    };
 }

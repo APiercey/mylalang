@@ -1,6 +1,7 @@
 mod interpreter;
 mod parser;
 mod tokenizer;
+mod types;
 use std::env;
 use std::fs;
 
@@ -13,5 +14,6 @@ fn main() {
     let mut tokens = tokenizer::tokenize(contents.as_str());
     let ast = parser::parse(&mut tokens);
 
-    interpreter::execute_tree(ast);
+    println!("{:?}", ast);
+    // interpreter::execute_tree(ast);
 }
