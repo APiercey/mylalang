@@ -1,5 +1,6 @@
 ; Let's look at the operators
-(add                      ; Add!
-  (subtract 5 10)         ; Subtract!!
-  (multiply               ; Multiply :) 
-    (divide 2 10 ) 45))   ; Divide...
+; (add                      ; Add!
+ ;  (subtract 5 10)         ; Subtract!!
+  ; (multiply               ; Multiply :) 
+   ;  (divide 2 10 ) 45))   ; Divide...
+(add 1 2)

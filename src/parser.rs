@@ -1,34 +1,6 @@
 use super::tokenizer;
 use crate::types::{vec_to_list, Types};
 
-#[derive(Debug)]
-pub struct AbstractSyntaxTree {
-    pub body: Vec<Node>,
-}
-
-#[derive(Debug)]
-pub struct NumberLiteral {
-    pub value: isize,
-}
-
-#[derive(Debug)]
-pub struct StringLiteral {
-    pub value: String,
-}
-
-#[derive(Debug)]
-pub struct CallExpression {
-    pub name: String,
-    pub params: Vec<Node>,
-}
-
-#[derive(Debug)]
-pub enum Node {
-    NumberLiteral(NumberLiteral),
-    StringLiteral(StringLiteral),
-    CallExpression(CallExpression),
-}
-
 fn parse_number(token: &tokenizer::Token) -> Types {
     return Types::Integer(
         token
