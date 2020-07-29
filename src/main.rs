@@ -83,7 +83,7 @@ fn main() {
         define_function(|args: VArgs| multiply(args[0].clone(), args[1].clone())),
     );
 
-    // println!("{:?}", ast);
-    // println!("{:?}", env);
-    interpreter::execute(&env, &ast);
+    let result = interpreter::execute(&env, ast);
+
+    println!("{:?}", result)
 }
