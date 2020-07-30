@@ -14,7 +14,7 @@ fn add(first: Types, second: Types) -> Types {
         (Types::Float(a), Types::Integer(b)) => Types::Float(a + (b as f64)),
         (Types::Integer(a), Types::Float(b)) => Types::Float((a as f64) + b),
         (Types::String(a), Types::String(b)) => Types::String(format!("{}{}", a, b)),
-        (_, _) => panic!("Oh boy, I'm in danger!"),
+        (a, b) => panic!("cannot add {:?} from {:?}", a, b),
     }
 }
 
@@ -23,7 +23,8 @@ fn subtract(first: Types, second: Types) -> Types {
         (Types::Integer(a), Types::Integer(b)) => Types::Integer(a - b),
         (Types::Float(a), Types::Integer(b)) => Types::Float(a - (b as f64)),
         (Types::Integer(a), Types::Float(b)) => Types::Float((a as f64) - b),
-        (_, _) => panic!("Oh boy, I'm in danger!"),
+        (Types::Float(a), Types::Float(b)) => Types::Float(a - b),
+        (a, b) => panic!("cannot subtract {:?} from {:?}", a, b),
     }
 }
 
@@ -34,7 +35,7 @@ fn divide(first: Types, second: Types) -> Types {
         (Types::Integer(a), Types::Integer(b)) => Types::Float((a as f64) / (b as f64)),
         (Types::Integer(a), Types::Float(b)) => Types::Float((a as f64) / b),
         (Types::Float(a), Types::Integer(b)) => Types::Float(a / (b as f64)),
-        (_, _) => panic!("Oh boy, I'm in danger!"),
+        (a, b) => panic!("cannot divide {:?} from {:?}", a, b),
     }
 }
 
@@ -44,7 +45,7 @@ fn multiply(first: Types, second: Types) -> Types {
         (Types::Integer(a), Types::Float(b)) => Types::Float((a as f64) * b),
         (Types::Float(a), Types::Integer(b)) => Types::Float(a * (b as f64)),
         (Types::Float(a), Types::Float(b)) => Types::Float(a * b),
-        (_, _) => panic!("Oh boy, I'm in danger!"),
+        (a, b) => panic!("cannot multiply {:?} from {:?}", a, b),
     }
 }
 
