@@ -42,7 +42,8 @@ fn parse_expression(
 fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer::Token) -> Types {
     match token.kind {
         tokenizer::Kinds::Number => parse_number(&token),
-        tokenizer::Kinds::Word => parse_string(&token),
+        tokenizer::Kinds::Str => parse_string(&token),
+        tokenizer::Kinds::Word => parse_word(&token),
         tokenizer::Kinds::OpeningParam => match input.next() {
             None => panic!("Early termination"),
             Some(expression_token) => parse_expression(input, &expression_token),
@@ -51,11 +52,14 @@ fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer
     }
 }
 
-pub fn parse(tokens: &mut std::vec::Vec<tokenizer::Token>) -> Types {
+pub fn parse(tokens: &mut std::vec::Vec<tokenizer::Token>) -> Vec<Types> {
     let mut t_iterable = tokens.iter();
+    let mut acc = vec![];
 
-    return match t_iterable.next() {
-        Some(next) => parse_token(&mut t_iterable, &next),
-        None => panic!("NO INPUT!"),
-    };
+    while let Some(next) = t_iterable.next() {
+        let result = parse_token(&mut t_iterable, &next);
+        acc.push(result);
+    }
+
+    return acc;
 }

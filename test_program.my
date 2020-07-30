@@ -1,5 +1,12 @@
+(def one 1)
+(def two 2)
+
+(inspect (add one two)
+
 ; Let's look at the operators
 (add                      ; Add!
   (subtract 5 10)         ; Subtract!!
   (multiply               ; Multiply :) 
     (divide 2 10 ) 45))   ; Divide...
+    
+

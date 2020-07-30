@@ -23,6 +23,16 @@ impl Types {
             _ => panic!("No apply"),
         };
     }
+
+    pub fn inspect(&self) {
+        return match *self {
+            Types::Func(f) => println!("<#func {:?}>", f),
+            Types::Integer(i) => println!("{}", i),
+            Types::String(ref s) => println!("{}", s),
+            Types::Float(f) => println!("{}", f),
+            _ => panic!("No apply"),
+        };
+    }
 }
 
 pub type TypeResult = Result<Types, TypeError>;

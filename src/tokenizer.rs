@@ -5,6 +5,7 @@ pub enum Kinds {
     ClosingParam,
     Number,
     Word,
+    Str,
 }
 
 #[derive(Debug)]
@@ -125,7 +126,6 @@ fn tokenize_string(input: &str) -> Token {
 fn tokenize_string_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) -> Token {
     return match input.next() {
         None if { acc.len() > 0 } => {
-            println!("{:?}", acc);
             panic!("Unterminated String! ...I'll be back...");
         }
         None => Token {
@@ -137,7 +137,7 @@ fn tokenize_string_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>
             acc.push('"');
             Token {
                 consumes: acc.len(),
-                kind: Kinds::Word,
+                kind: Kinds::Str,
                 value: acc.to_vec(),
             }
         }
@@ -218,5 +218,6 @@ pub fn tokenize(full_prg: &str) -> Vec<Token> {
             }
         }
     }
+
     return acc;
 }
