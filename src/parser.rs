@@ -2,15 +2,12 @@ use super::tokenizer;
 use crate::types::{vec_to_list, Types};
 
 fn parse_number(token: &tokenizer::Token) -> Types {
-    return Types::Integer(
-        token
-            .value
-            .iter()
-            .cloned()
-            .collect::<String>()
-            .parse::<isize>()
-            .unwrap(),
-    );
+    let value_as_string = token.value.iter().cloned().collect::<String>();
+
+    return match token.value.contains(&'.') {
+        true => Types::Float(value_as_string.parse::<f64>().unwrap()),
+        false => Types::Integer(value_as_string.parse::<isize>().unwrap()),
+    };
 }
 
 fn parse_word(token: &tokenizer::Token) -> Types {

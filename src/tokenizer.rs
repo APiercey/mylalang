@@ -98,7 +98,7 @@ fn tokenize_number_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>
             value: vec![],
         },
         Some(x) => match x {
-            '0'..='9' => {
+            '0'..='9' | '.' => {
                 acc.push(x);
                 tokenize_number_r(acc, input)
             }

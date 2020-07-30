@@ -1,12 +1,9 @@
 (def one 1)
 (def two 2)
 
-(inspect (add one two)
+(inspect (add 1 .01))
+(inspect (add 2 .02))
+(inspect (add 3 .03))
+(inspect (add (inspect (add one 4.05)) 3))
 
-; Let's look at the operators
-(add                      ; Add!
-  (subtract 5 10)         ; Subtract!!
-  (multiply               ; Multiply :) 
-    (divide 2 10 ) 45))   ; Divide...
-    
-
+(inspect (subtract 11.45 2.11))
