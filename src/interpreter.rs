@@ -26,7 +26,7 @@ pub fn execute(env: &Env, ast: Types) -> Types {
                             Types::Word(ref def_name_value) => {
                                 set_env(&env, &def_name_value, def_value)
                             }
-                            _ => panic!("Unexecpted input"),
+                            _ => panic!("Unexpected input"),
                         };
 
                         return def_name;

@@ -15,13 +15,12 @@ fn main() {
 
     let mut tokens = tokenizer::tokenize(contents.as_str());
     let ast = parser::parse(&mut tokens);
-    println!("{:?}", ast);
-    // let env = env::new_env(None);
+    let env = env::new_env(None);
 
-    // core::set_core_functions(&env);
+    core::set_core_functions(&env);
 
-    // let mut iter = ast.iter();
-    // while let Some(next) = iter.next() {
-    //     interpreter::execute(&env, next.clone());
-    // }
+    let mut iter = ast.iter();
+    while let Some(next) = iter.next() {
+        interpreter::execute(&env, next.clone());
+    }
 }
