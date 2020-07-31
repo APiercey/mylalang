@@ -3,6 +3,8 @@ pub enum Kinds {
     Null,
     OpeningParam,
     ClosingParam,
+    OpeningVectorBracket,
+    ClosingVectorBracket,
     Number,
     Word,
     Str,
@@ -81,6 +83,14 @@ fn tokenize_opening_param(input: &str) -> Token {
 
 fn tokenize_closing_param(input: &str) -> Token {
     return tokenize_character(Kinds::ClosingParam, ')', input);
+}
+
+fn tokenize_opening_vector_bracket(input: &str) -> Token {
+    return tokenize_character(Kinds::OpeningVectorBracket, '[', input);
+}
+
+fn tokenize_closing_vector_bracket(input: &str) -> Token {
+    return tokenize_character(Kinds::ClosingVectorBracket, ']', input);
 }
 
 fn tokenize_number(input: &str) -> Token {
@@ -199,6 +209,8 @@ pub fn tokenize(full_prg: &str) -> Vec<Token> {
         &tokenize_new_line,
         &tokenize_opening_param,
         &tokenize_closing_param,
+        &tokenize_opening_vector_bracket,
+        &tokenize_closing_vector_bracket,
         &tokenize_string,
         &tokenize_number,
         &tokenize_word,

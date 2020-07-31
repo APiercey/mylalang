@@ -5,6 +5,7 @@ pub enum Types {
     Integer(isize),
     Word(String),
     List(Rc<Vec<Types>>),
+    Vector(Rc<Vec<Types>>),
     String(String),
     Float(f64),
     Func(fn(VArgs) -> Types),
@@ -41,6 +42,10 @@ pub type VArgs = Vec<Types>;
 
 pub fn vec_to_list(list: Vec<Types>) -> Types {
     return Types::List(Rc::new(list));
+}
+
+pub fn vec_to_vector(vector: Vec<Types>) -> Types {
+    return Types::Vector(Rc::new(vector));
 }
 
 pub fn define_function(fun: fn(VArgs) -> Types) -> Types {

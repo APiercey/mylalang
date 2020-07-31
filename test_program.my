@@ -1,9 +1,1 @@
-(def one 1)
-(def two 2)
-
-(inspect (add 1 .01))
-(inspect (add 2 .02))
-(inspect (add 3 .03))
-(inspect (add (inspect (add one 4.05)) 3))
-
-(inspect (subtract 11.45 2.11))
+(def fun [one two] (add one two))

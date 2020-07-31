@@ -1,5 +1,5 @@
 use super::tokenizer;
-use crate::types::{vec_to_list, Types};
+use crate::types::{vec_to_list, vec_to_vector, Types};
 
 fn parse_number(token: &tokenizer::Token) -> Types {
     let value_as_string = token.value.iter().cloned().collect::<String>();
@@ -36,6 +36,19 @@ fn parse_expression(
     return vec_to_list(list);
 }
 
+fn parse_vector(input: &mut std::slice::Iter<tokenizer::Token>) -> Types {
+    let mut list = vec![];
+
+    while let Some(next) = input.next() {
+        match next.kind {
+            tokenizer::Kinds::ClosingVectorBracket => break,
+            _ => list.push(parse_token(input, &next)),
+        }
+    }
+
+    return vec_to_vector(list);
+}
+
 fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer::Token) -> Types {
     match token.kind {
         tokenizer::Kinds::Number => parse_number(&token),
@@ -45,6 +58,7 @@ fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer
             None => panic!("Early termination"),
             Some(expression_token) => parse_expression(input, &expression_token),
         },
+        tokenizer::Kinds::OpeningVectorBracket => parse_vector(input),
         _ => panic!("Unknown token"),
     }
 }
