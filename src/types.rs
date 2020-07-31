@@ -31,7 +31,9 @@ impl Types {
             Types::Integer(i) => println!("{}", i),
             Types::String(ref s) => println!("{}", s),
             Types::Float(f) => println!("{}", f),
-            _ => panic!("No apply"),
+            Types::Vector(ref v) => println!("{:?}", v),
+            Types::Word(ref w) => println!("<#def {:?}>", w),
+            _ => panic!("No inspect"),
         };
     }
 }
