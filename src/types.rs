@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Types {
     Integer(isize),
     Word(String),

@@ -1,5 +1,5 @@
 use crate::env;
-use crate::types::{define_function, Types, VArgs};
+use crate::types::{define_function, vec_to_vector, Types, VArgs};
 
 fn inspect(t: Types) -> Types {
     t.inspect();
@@ -14,6 +14,7 @@ fn add(first: Types, second: Types) -> Types {
         (Types::Float(a), Types::Integer(b)) => Types::Float(a + (b as f64)),
         (Types::Integer(a), Types::Float(b)) => Types::Float((a as f64) + b),
         (Types::String(a), Types::String(b)) => Types::String(format!("{}{}", a, b)),
+        (Types::Vector(a), Types::Vector(b)) => vec_to_vector([&a[..], &b[..]].concat()),
         (a, b) => panic!("cannot add {:?} from {:?}", a, b),
     }
 }
@@ -24,6 +25,7 @@ fn subtract(first: Types, second: Types) -> Types {
         (Types::Float(a), Types::Integer(b)) => Types::Float(a - (b as f64)),
         (Types::Integer(a), Types::Float(b)) => Types::Float((a as f64) - b),
         (Types::Float(a), Types::Float(b)) => Types::Float(a - b),
+        (Types::Vector(a), Types::Vector(b)) => panic!("vector subtraction is not implemented :("),
         (a, b) => panic!("cannot subtract {:?} from {:?}", a, b),
     }
 }
