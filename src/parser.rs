@@ -20,20 +20,21 @@ fn parse_string(token: &tokenizer::Token) -> Types {
     return Types::String(string_slice.iter().cloned().collect::<String>());
 }
 
-fn parse_expression(
-    input: &mut std::slice::Iter<tokenizer::Token>,
-    token: &tokenizer::Token,
-) -> Types {
-    let mut list = vec![parse_word(&token)];
+fn parse_expression(input: &mut std::slice::Iter<tokenizer::Token>) -> Types {
+    match input.next() {
+        None => panic!("Early termination"),
+        Some(token) => {
+            let mut list = vec![parse_token(input, &token)];
 
-    while let Some(next) = input.next() {
-        match next.kind {
-            tokenizer::Kinds::ClosingParam => break,
-            _ => list.push(parse_token(input, &next)),
+            while let Some(next) = input.next() {
+                match next.kind {
+                    tokenizer::Kinds::ClosingParam => break,
+                    _ => list.push(parse_token(input, &next)),
+                }
+            }
+            return vec_to_list(list);
         }
     }
-
-    return vec_to_list(list);
 }
 
 fn parse_vector(input: &mut std::slice::Iter<tokenizer::Token>) -> Types {
@@ -54,10 +55,7 @@ fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer
         tokenizer::Kinds::Number => parse_number(&token),
         tokenizer::Kinds::Str => parse_string(&token),
         tokenizer::Kinds::Word => parse_word(&token),
-        tokenizer::Kinds::OpeningParam => match input.next() {
-            None => panic!("Early termination"),
-            Some(expression_token) => parse_expression(input, &expression_token),
-        },
+        tokenizer::Kinds::OpeningParam => parse_expression(input),
         tokenizer::Kinds::OpeningVectorBracket => parse_vector(input),
         _ => panic!("Unknown token"),
     }

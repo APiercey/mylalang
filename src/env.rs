@@ -30,6 +30,24 @@ pub fn env_find(env: &Env, key: &str) -> Option<Env> {
     }
 }
 
+pub fn env_bind(env: &Env, bindings: Types, values: Vec<Types>) -> Env {
+    let new_env = new_env(Some(env.clone()));
+
+    match bindings {
+        Types::Vector(v) => {
+            for (i, b) in v.iter().enumerate() {
+                match b {
+                    Types::Word(w) => set_env(&env, &w, values[i].clone()),
+                    _ => panic!("Currently unexpected"),
+                }
+            }
+        }
+        _ => panic!("Not expected"),
+    }
+
+    return new_env;
+}
+
 pub fn get_env(env: &Env, key: &Types) -> TypeResult {
     match key {
         Types::Word(ref w) => match env_find(env, w) {

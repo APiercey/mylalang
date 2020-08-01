@@ -21,6 +21,6 @@ fn main() {
 
     let mut iter = ast.iter();
     while let Some(next) = iter.next() {
-        interpreter::execute(&env, next.clone());
+        interpreter::execute(env.clone(), next.clone());
     }
 }

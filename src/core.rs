@@ -25,7 +25,7 @@ fn subtract(first: Types, second: Types) -> Types {
         (Types::Float(a), Types::Integer(b)) => Types::Float(a - (b as f64)),
         (Types::Integer(a), Types::Float(b)) => Types::Float((a as f64) - b),
         (Types::Float(a), Types::Float(b)) => Types::Float(a - b),
-        (Types::Vector(a), Types::Vector(b)) => panic!("vector subtraction is not implemented :("),
+        (Types::Vector(_), Types::Vector(_)) => panic!("vector subtraction is not implemented :("),
         (a, b) => panic!("cannot subtract {:?} from {:?}", a, b),
     }
 }

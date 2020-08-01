@@ -1,6 +1,7 @@
+use crate::env::{env_bind, new_env, set_env, Env};
 use std::rc::Rc;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum Types {
     Integer(isize),
     Word(String),
@@ -9,6 +10,12 @@ pub enum Types {
     String(String),
     Float(f64),
     Func(fn(VArgs) -> Types),
+    DefFunc {
+        eval: fn(env: Env, ast: Types) -> Types,
+        env: Env,
+        params: Rc<Types>,
+        body: Rc<Types>,
+    },
 }
 
 #[derive(Debug)]
@@ -21,18 +28,34 @@ impl Types {
     pub fn apply(&self, args: VArgs) -> Types {
         return match *self {
             Types::Func(f) => f(args),
+            Types::DefFunc {
+                ref params,
+                ref env,
+                ref body,
+                eval,
+                ..
+            } => {
+                let p = &**params;
+                let b = &**body;
+                let fun_env = env_bind(&env, p.clone(), args);
+
+                return eval(fun_env, b.clone());
+            }
             _ => panic!("No apply"),
         };
     }
 
     pub fn inspect(&self) {
+        // println!("debug {:?}", self);
         return match *self {
             Types::Func(f) => println!("<#func {:?}>", f),
             Types::Integer(i) => println!("{}", i),
             Types::String(ref s) => println!("{}", s),
             Types::Float(f) => println!("{}", f),
-            Types::Vector(ref v) => println!("{:?}", v),
+            Types::Vector(ref v) => println!("<#vec {:?}", v),
+            Types::List(ref l) => println!("<#list {:?}", l),
             Types::Word(ref w) => println!("<#def {:?}>", w),
+            Types::DefFunc { ref params, .. } => println!("<#anonfunc {:?}>", params),
             _ => panic!("No inspect"),
         };
     }
