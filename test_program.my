@@ -12,3 +12,5 @@
 
 (greeter "Mila")
 
+(inspect true)
+(inspect false)

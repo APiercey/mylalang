@@ -9,6 +9,7 @@ pub enum Types {
     Vector(Rc<Vec<Types>>),
     String(String),
     Float(f64),
+    Bool(bool),
     Func(fn(VArgs) -> Types),
     DefFunc {
         eval: fn(env: Env, ast: Types) -> Types,
@@ -50,6 +51,7 @@ impl Types {
             Types::Vector(ref v) => println!("<#vec {:?}", v),
             Types::List(ref l) => println!("<#list {:?}", l),
             Types::Word(ref w) => println!("<#def {:?}>", w),
+            Types::Bool(b) => println!("{}", b),
             Types::DefFunc { ref params, .. } => println!("<#anonfunc {:?}>", params),
         };
     }
