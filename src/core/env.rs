@@ -1,4 +1,4 @@
-use crate::types::{TypeResult, Types};
+use crate::core::types::{TypeResult, Types};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;

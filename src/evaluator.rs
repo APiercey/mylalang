@@ -1,5 +1,5 @@
-use crate::env::{get_env, set_env, Env};
-use crate::types::Types;
+use crate::core::env::{get_env, set_env, Env};
+use crate::core::types::Types;
 use std::rc::Rc;
 
 fn evaluate_ast(env: Env, ast: Types) -> Types {
@@ -13,14 +13,14 @@ fn evaluate_ast(env: Env, ast: Types) -> Types {
     }
 }
 
-pub fn execute(env: Env, ast: Types) -> Types {
+pub fn evaluate(env: Env, ast: Types) -> Types {
     match ast {
         Types::List(ref l) => {
             let action = &l[0].clone();
 
             match action {
                 Types::List(ref _fl) => {
-                    let result = execute(env, action.clone());
+                    let result = evaluate(env, action.clone());
 
                     let params = l[1..].to_vec();
 
@@ -35,7 +35,7 @@ pub fn execute(env: Env, ast: Types) -> Types {
                             Types::Word(ref def_name_value) => set_env(
                                 &env,
                                 &def_name_value,
-                                execute(env.clone(), def_value.clone()),
+                                evaluate(env.clone(), def_value.clone()),
                             ),
                             _ => panic!("Unexpected input"),
                         };
@@ -47,7 +47,7 @@ pub fn execute(env: Env, ast: Types) -> Types {
                         let body = l[2].clone();
 
                         let f = Types::DefFunc {
-                            eval: execute,
+                            eval: evaluate,
                             env: env.clone(),
                             params: Rc::new(params),
                             body: Rc::new(body),
@@ -64,7 +64,7 @@ pub fn execute(env: Env, ast: Types) -> Types {
                                 let mut iter = l[1..].iter();
 
                                 while let Some(next) = iter.next() {
-                                    let result = execute(env.clone(), next.clone());
+                                    let result = evaluate(env.clone(), next.clone());
                                     args.push(result);
                                 }
 

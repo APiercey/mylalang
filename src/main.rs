@@ -1,9 +1,8 @@
 mod core;
-mod env;
-mod interpreter;
+mod evaluator;
 mod parser;
 mod tokenizer;
-mod types;
+use crate::core::env;
 use std::env as envargs;
 use std::fs;
 
@@ -12,15 +11,15 @@ fn main() {
     let filename = &args[1];
 
     let contents = fs::read_to_string(filename).expect("Something went wrong reading the file");
-
-    let mut tokens = tokenizer::tokenize(contents.as_str());
-    let ast = parser::parse(&mut tokens);
     let env = env::new_env(None);
 
     core::set_core_functions(&env);
 
+    let mut tokens = tokenizer::tokenize(contents.as_str());
+    let ast = parser::parse(&mut tokens);
+
     let mut iter = ast.iter();
     while let Some(next) = iter.next() {
-        interpreter::execute(env.clone(), next.clone());
+        evaluator::evaluate(env.clone(), next.clone());
     }
 }
