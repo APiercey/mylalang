@@ -1,4 +1,4 @@
-use crate::env::{env_bind, new_env, set_env, Env};
+use crate::env::{env_bind, Env};
 use std::rc::Rc;
 
 #[derive(Debug, Clone)]
@@ -18,11 +18,7 @@ pub enum Types {
     },
 }
 
-#[derive(Debug)]
-pub enum TypeError {
-    ErrMessage(String),
-    Type(Types),
-}
+pub type ErrMessage = String;
 
 impl Types {
     pub fn apply(&self, args: VArgs) -> Types {
@@ -46,7 +42,6 @@ impl Types {
     }
 
     pub fn inspect(&self) {
-        // println!("debug {:?}", self);
         return match *self {
             Types::Func(f) => println!("<#func {:?}>", f),
             Types::Integer(i) => println!("{}", i),
@@ -56,12 +51,11 @@ impl Types {
             Types::List(ref l) => println!("<#list {:?}", l),
             Types::Word(ref w) => println!("<#def {:?}>", w),
             Types::DefFunc { ref params, .. } => println!("<#anonfunc {:?}>", params),
-            _ => panic!("No inspect"),
         };
     }
 }
 
-pub type TypeResult = Result<Types, TypeError>;
+pub type TypeResult = Result<Types, ErrMessage>;
 
 pub type VArgs = Vec<Types>;
 

@@ -1,4 +1,4 @@
-use crate::types::{TypeError, TypeResult, Types};
+use crate::types::{TypeResult, Types};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -55,7 +55,7 @@ pub fn get_env(env: &Env, key: &Types) -> TypeResult {
                 .data
                 .borrow()
                 .get(w)
-                .ok_or(TypeError::ErrMessage("No definition found".to_string()))?
+                .ok_or("No definition found".to_string())?
                 .clone()),
             _ => panic!("inner chill"),
         },
