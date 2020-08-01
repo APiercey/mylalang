@@ -2,6 +2,13 @@ use crate::core::env::{get_env, set_env, Env};
 use crate::core::types::Types;
 use std::rc::Rc;
 
+fn evaluate_bool_value(ast: Types) -> bool {
+    return match ast {
+        Types::Bool(b) => b,
+        _ => true,
+    };
+}
+
 fn evaluate_ast(env: Env, ast: Types) -> Types {
     match ast {
         Types::Integer(_) => ast,
@@ -60,13 +67,8 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         let if_true_expression = l[2].clone();
                         let if_false_expression = l[3].clone();
 
-                        let bool_result = match evaluate(env.clone(), predicate.clone()) {
-                            Types::Bool(b) => b,
-                            Types::Integer(i) => i > 0,
-                            Types::String(s) => s.len() > 0,
-                            Types::Vector(v) => v.len() > 0,
-                            _ => false,
-                        };
+                        let bool_result =
+                            evaluate_bool_value(evaluate(env.clone(), predicate.clone()));
 
                         return if bool_result {
                             evaluate(env, if_true_expression)
@@ -79,13 +81,8 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         let if_true_expression = l[2].clone();
                         let if_false_expression = l[3].clone();
 
-                        let bool_result = match evaluate(env.clone(), predicate.clone()) {
-                            Types::Bool(b) => b,
-                            Types::Integer(i) => i > 0,
-                            Types::String(s) => s.len() > 0,
-                            Types::Vector(v) => v.len() > 0,
-                            _ => false,
-                        };
+                        let bool_result =
+                            evaluate_bool_value(evaluate(env.clone(), predicate.clone()));
 
                         return if !bool_result {
                             evaluate(env, if_true_expression)
