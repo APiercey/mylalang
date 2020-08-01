@@ -55,6 +55,25 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
 
                         return f;
                     }
+                    "if" => {
+                        let predicate = l[1].clone();
+                        let if_true_expression = l[2].clone();
+                        let if_false_expression = l[3].clone();
+
+                        let bool_result = match evaluate(env.clone(), predicate.clone()) {
+                            Types::Bool(b) => b,
+                            Types::Integer(i) => i > 0,
+                            Types::String(s) => s.len() > 0,
+                            Types::Vector(v) => v.len() > 0,
+                            _ => false,
+                        };
+
+                        return if bool_result {
+                            evaluate(env, if_true_expression)
+                        } else {
+                            evaluate(env, if_false_expression)
+                        };
+                    }
                     _ => {
                         let t = evaluate_ast(env.clone(), action.clone());
 

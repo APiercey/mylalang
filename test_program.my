@@ -1,16 +1,1 @@
-; Silly variable just to demo
-(def two 2)
-
-; Square
-(def square (fn [a] (multiply a a)))
-
-; Inspect result
-(inspect (square two))
-
-; Greeter
-(def greeter (fn [name] (inspect (add (add "Hello, " name) "!"))))
-
-(greeter "Mila")
-
-(inspect true)
-(inspect false)
+(inspect (if (add 0 0) (add 1 2) (multiply 10 23)))
