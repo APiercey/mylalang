@@ -1,1 +1,1 @@
-(inspect (if (add 0 0) (add 1 2) (multiply 10 23)))
+(inspect (unless (add 0 0) (add 1 2) (multiply 10 23)))
