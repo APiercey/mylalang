@@ -132,6 +132,7 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
 
                                 t.apply(args)
                             }
+                            Types::Error(_) => t,
                             _ => panic!("Expected function"),
                         }
                     }

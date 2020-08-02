@@ -57,7 +57,10 @@ pub fn get_env(env: &Env, key: &Types) -> TypeResult {
                 .get(w)
                 .ok_or("No definition found".to_string())?
                 .clone()),
-            None => panic!("{:?} does not exist within this scope", w),
+            None => Ok(Types::Error(format!(
+                "{:?} does not exist within this scope",
+                w
+            ))),
         },
         _ => panic!("yo chill"),
     }

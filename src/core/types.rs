@@ -10,6 +10,7 @@ pub enum Types {
     String(String),
     Float(f64),
     Bool(bool),
+    Error(String),
     Nil,
     Func(fn(VArgs) -> Types),
     DefFunc {
@@ -112,6 +113,7 @@ impl Types {
             Types::Word(ref w) => format!("<#def {:?}>", w),
             Types::Bool(b) => format!("{}", b),
             Types::Nil => format!("nil"),
+            Types::Error(ref s) => format!("<Err {}>", s),
             Types::DefFunc { ref params, .. } => format!("<#anonfunc {:?}>", params),
         };
     }
