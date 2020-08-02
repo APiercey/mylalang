@@ -10,6 +10,7 @@ pub enum Types {
     String(String),
     Float(f64),
     Bool(bool),
+    Nil,
     Func(fn(VArgs) -> Types),
     DefFunc {
         eval: fn(env: Env, ast: Types) -> Types,
@@ -47,6 +48,7 @@ impl Types {
             (Types::Integer(a), Types::Integer(b)) => Types::Bool(a == b),
             (Types::String(a), Types::String(b)) => Types::Bool(a == b),
             (Types::Float(a), Types::Float(b)) => Types::Bool(a == b),
+            (Types::Nil, Types::Nil) => Types::Bool(true),
             (_, _) => Types::Bool(false),
         }
     }
@@ -56,6 +58,9 @@ impl Types {
             (Types::Integer(a), Types::Integer(b)) => Types::Bool(a > b),
             (Types::String(a), Types::String(b)) => Types::Bool(a > b),
             (Types::Float(a), Types::Float(b)) => Types::Bool(a > b),
+            (Types::Nil, Types::Nil) => Types::Bool(true),
+            (_, Types::Nil) => Types::Bool(true),
+            (Types::Nil, _) => Types::Bool(false),
             (_, _) => Types::Bool(false),
         }
     }
@@ -65,6 +70,9 @@ impl Types {
             (Types::Integer(a), Types::Integer(b)) => Types::Bool(a < b),
             (Types::String(a), Types::String(b)) => Types::Bool(a < b),
             (Types::Float(a), Types::Float(b)) => Types::Bool(a < b),
+            (Types::Nil, Types::Nil) => Types::Bool(true),
+            (_, Types::Nil) => Types::Bool(false),
+            (Types::Nil, _) => Types::Bool(true),
             (_, _) => Types::Bool(false),
         }
     }
@@ -74,6 +82,9 @@ impl Types {
             (Types::Integer(a), Types::Integer(b)) => Types::Bool(a <= b),
             (Types::String(a), Types::String(b)) => Types::Bool(a <= b),
             (Types::Float(a), Types::Float(b)) => Types::Bool(a <= b),
+            (Types::Nil, Types::Nil) => Types::Bool(true),
+            (_, Types::Nil) => Types::Bool(false),
+            (Types::Nil, _) => Types::Bool(true),
             (_, _) => Types::Bool(false),
         }
     }
@@ -83,6 +94,9 @@ impl Types {
             (Types::Integer(a), Types::Integer(b)) => Types::Bool(a >= b),
             (Types::String(a), Types::String(b)) => Types::Bool(a >= b),
             (Types::Float(a), Types::Float(b)) => Types::Bool(a >= b),
+            (Types::Nil, Types::Nil) => Types::Bool(true),
+            (_, Types::Nil) => Types::Bool(true),
+            (Types::Nil, _) => Types::Bool(false),
             (_, _) => Types::Bool(false),
         }
     }
@@ -97,6 +111,7 @@ impl Types {
             Types::List(ref l) => println!("<#list {:?}", l),
             Types::Word(ref w) => println!("<#def {:?}>", w),
             Types::Bool(b) => println!("{}", b),
+            Types::Nil => print!("nil"),
             Types::DefFunc { ref params, .. } => println!("<#anonfunc {:?}>", params),
         };
     }

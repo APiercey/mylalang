@@ -68,4 +68,5 @@ pub fn set_core_functions(env: &Env) {
 
     set_env(&env, "true", Types::Bool(true));
     set_env(&env, "false", Types::Bool(false));
+    set_env(&env, "nil", Types::Nil);
 }
