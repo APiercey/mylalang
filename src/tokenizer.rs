@@ -159,6 +159,10 @@ fn tokenize_number_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>
                 acc.push(x);
                 tokenize_number_r(acc, input)
             }
+            '_' if { acc.len() > 0 } => {
+                acc.push(x);
+                tokenize_number_r(acc, input)
+            }
             _ if { acc.len() > 0 } => Token {
                 consumes: acc.len(),
                 kind: Kinds::Number,
@@ -229,7 +233,11 @@ fn tokenize_word_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) 
             value: vec![],
         },
         Some(x) => match x {
-            'a'..='z' => {
+            'a'..='z' | 'A'..='Z' => {
+                acc.push(x);
+                tokenize_word_r(acc, input)
+            }
+            '_' | '0'..='9' | '?' | '!' if { acc.len() > 0 } => {
                 acc.push(x);
                 tokenize_word_r(acc, input)
             }
