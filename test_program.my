@@ -1,2 +1,0 @@
-(inspect (if true "It works!" "uhhh"))
-(inspect (unless true "uhhh" "It works!"))

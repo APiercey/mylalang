@@ -42,6 +42,51 @@ impl Types {
         };
     }
 
+    pub fn eq(&self, other: &Self) -> Types {
+        match (self, other) {
+            (Types::Integer(a), Types::Integer(b)) => Types::Bool(a == b),
+            (Types::String(a), Types::String(b)) => Types::Bool(a == b),
+            (Types::Float(a), Types::Float(b)) => Types::Bool(a == b),
+            (_, _) => Types::Bool(false),
+        }
+    }
+
+    pub fn gt(&self, other: &Self) -> Types {
+        match (self, other) {
+            (Types::Integer(a), Types::Integer(b)) => Types::Bool(a > b),
+            (Types::String(a), Types::String(b)) => Types::Bool(a > b),
+            (Types::Float(a), Types::Float(b)) => Types::Bool(a > b),
+            (_, _) => Types::Bool(false),
+        }
+    }
+
+    pub fn lt(&self, other: &Self) -> Types {
+        match (self, other) {
+            (Types::Integer(a), Types::Integer(b)) => Types::Bool(a < b),
+            (Types::String(a), Types::String(b)) => Types::Bool(a < b),
+            (Types::Float(a), Types::Float(b)) => Types::Bool(a < b),
+            (_, _) => Types::Bool(false),
+        }
+    }
+
+    pub fn lt_or_eq(&self, other: &Self) -> Types {
+        match (self, other) {
+            (Types::Integer(a), Types::Integer(b)) => Types::Bool(a <= b),
+            (Types::String(a), Types::String(b)) => Types::Bool(a <= b),
+            (Types::Float(a), Types::Float(b)) => Types::Bool(a <= b),
+            (_, _) => Types::Bool(false),
+        }
+    }
+
+    pub fn gt_or_eq(&self, other: &Self) -> Types {
+        match (self, other) {
+            (Types::Integer(a), Types::Integer(b)) => Types::Bool(a >= b),
+            (Types::String(a), Types::String(b)) => Types::Bool(a >= b),
+            (Types::Float(a), Types::Float(b)) => Types::Bool(a >= b),
+            (_, _) => Types::Bool(false),
+        }
+    }
+
     pub fn inspect(&self) {
         return match *self {
             Types::Func(f) => println!("<#func {:?}>", f),

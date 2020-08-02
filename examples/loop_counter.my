@@ -1,0 +1,11 @@
+(def start 0)
+
+(def inc (fn [i] 
+  (+ i 1)))
+
+(def loop (fn [i] 
+  (if (<= i 10) 
+    (loop (inc (inspect i)))
+    (inspect "finished"))))
+
+(loop start)
