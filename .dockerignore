@@ -1,0 +1,6 @@
+target/
+examples/
+.git/
+.vscode/
+.tags
+Dockerfile
