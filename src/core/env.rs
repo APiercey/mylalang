@@ -57,7 +57,7 @@ pub fn get_env(env: &Env, key: &Types) -> TypeResult {
                 .get(w)
                 .ok_or("No definition found".to_string())?
                 .clone()),
-            _ => panic!("inner chill"),
+            None => panic!("{:?} does not exist within this scope", w),
         },
         _ => panic!("yo chill"),
     }

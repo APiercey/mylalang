@@ -70,7 +70,11 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                             _ => panic!("expected a list of expression pairs"),
                         }
 
-                        return evaluate(env.clone(), l[2].clone());
+                        let result = l[2..]
+                            .iter()
+                            .fold(Types::Nil, |_state, t| evaluate(env.clone(), t.clone()));
+
+                        return result;
                     }
                     "fn" => {
                         let params = l[1].clone();
