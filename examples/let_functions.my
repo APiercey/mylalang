@@ -1,3 +1,9 @@
+; LET statements are a work in progress
+
 (def shifter (fn [i]
-  (let [x (* i i) y (+ i i)]
-    (- x y))))
+  (let [x (* i i)
+        y (+ i i)
+        z (- x y)]
+    z)))
+
+(inspect (shifter 10))

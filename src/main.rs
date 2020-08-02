@@ -16,6 +16,7 @@ fn main() {
     core::set_core_functions(&env);
 
     let mut tokens = tokenizer::tokenize(contents.as_str());
+
     let ast = parser::parse(&mut tokens);
 
     let mut iter = ast.iter();

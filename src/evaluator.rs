@@ -49,6 +49,29 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
 
                         return def_name;
                     }
+                    "let" => {
+                        match l[1].clone() {
+                            Types::Vector(assignment_pars) => {
+                                let mut pairs = assignment_pars.chunks(2);
+
+                                while let Some(pair) = pairs.next() {
+                                    match pair {
+                                        [Types::Word(word), value] => set_env(
+                                            &env,
+                                            &word,
+                                            evaluate(env.clone(), value.clone()),
+                                        ),
+                                        [_, _] => panic!("Need a word and a value"),
+                                        [_] => panic!("Missing value"),
+                                        _ => panic!("Unexpected"),
+                                    }
+                                }
+                            }
+                            _ => panic!("expected a list of expression pairs"),
+                        }
+
+                        return evaluate(env.clone(), l[2].clone());
+                    }
                     "fn" => {
                         let params = l[1].clone();
                         let body = l[2].clone();
