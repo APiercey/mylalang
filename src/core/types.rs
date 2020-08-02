@@ -101,18 +101,18 @@ impl Types {
         }
     }
 
-    pub fn inspect(&self) {
+    pub fn inspect(&self) -> String {
         return match *self {
-            Types::Func(f) => println!("<#func {:?}>", f),
-            Types::Integer(i) => println!("{}", i),
-            Types::String(ref s) => println!("{}", s),
-            Types::Float(f) => println!("{}", f),
-            Types::Vector(ref v) => println!("<#vec {:?}", v),
-            Types::List(ref l) => println!("<#list {:?}", l),
-            Types::Word(ref w) => println!("<#def {:?}>", w),
-            Types::Bool(b) => println!("{}", b),
-            Types::Nil => print!("nil"),
-            Types::DefFunc { ref params, .. } => println!("<#anonfunc {:?}>", params),
+            Types::Func(f) => format!("<#func {:?}>", f),
+            Types::Integer(i) => format!("{}", i),
+            Types::String(ref s) => format!("{}", s),
+            Types::Float(f) => format!("{}", f),
+            Types::Vector(ref v) => format!("<#vec {:?}>", v),
+            Types::List(ref l) => format!("<#list {:?}>", l),
+            Types::Word(ref w) => format!("<#def {:?}>", w),
+            Types::Bool(b) => format!("{}", b),
+            Types::Nil => format!("nil"),
+            Types::DefFunc { ref params, .. } => format!("<#anonfunc {:?}>", params),
         };
     }
 }

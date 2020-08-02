@@ -1,5 +1,5 @@
-use super::tokenizer;
 use crate::core::types::{vec_to_list, vec_to_vector, Types};
+use crate::tokenizer;
 
 fn parse_number(token: &tokenizer::Token) -> Types {
     let value_as_string = token.value.iter().cloned().collect::<String>();

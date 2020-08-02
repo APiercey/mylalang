@@ -1,7 +1,9 @@
 use crate::core::types::{vec_to_vector, Types};
 
 pub fn inspect(t: Types) -> Types {
-    t.inspect();
+    let inspection = t.inspect();
+
+    println!("{}", inspection);
 
     return t;
 }

@@ -1,8 +1,8 @@
-mod core;
-mod evaluator;
-mod parser;
-mod tokenizer;
-use crate::core::env;
+use myla::core;
+use myla::core::env;
+use myla::evaluator;
+use myla::parser;
+use myla::tokenizer;
 use std::env as envargs;
 use std::fs;
 
