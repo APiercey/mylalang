@@ -9,17 +9,6 @@ fn evaluate_bool_value(ast: Types) -> bool {
     };
 }
 
-fn evaluate_ast(env: Env, ast: Types) -> Types {
-    match ast {
-        Types::Integer(_) => ast,
-        Types::Word(_) => match get_env(&env, &ast) {
-            Ok(t) => t,
-            Err(_) => panic!("Error, definition does not exist"),
-        },
-        _ => panic!("Unsure what to do here"),
-    }
-}
-
 pub fn evaluate(env: Env, ast: Types) -> Types {
     match ast {
         Types::List(ref l) => {
@@ -118,7 +107,7 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         };
                     }
                     _ => {
-                        let t = evaluate_ast(env.clone(), action.clone());
+                        let t = evaluate(env.clone(), action.clone());
 
                         match t {
                             Types::Func(_) | Types::DefFunc { .. } => {

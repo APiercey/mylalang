@@ -1,8 +1,5 @@
 use myla::core;
 use myla::core::env;
-use myla::evaluator;
-use myla::parser;
-use myla::tokenizer;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
 
@@ -20,14 +17,8 @@ fn main() {
         match readline {
             Ok(line) => {
                 rl.add_history_entry(line.as_str());
-                let mut tokens = tokenizer::tokenize(line.as_str());
-                let ast = parser::parse(&mut tokens);
-
-                let mut iter = ast.iter();
-                while let Some(next) = iter.next() {
-                    let inspection = evaluator::evaluate(env.clone(), next.clone()).inspect();
-                    println!("=> {}", inspection);
-                }
+                let result = myla::evaluate(&env, line.as_str());
+                println!("=> {}", result.inspect());
             }
             Err(ReadlineError::Interrupted) => {
                 println!("CTRL-C");
