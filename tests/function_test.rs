@@ -1,32 +1,6 @@
-use myla::core;
-use myla::core::env;
-use myla::core::types::Types;
-use myla::core::types::Types::{Float, Integer};
-use myla::evaluator;
-use myla::parser;
-use myla::tokenizer;
-
-fn evaluate(program: &str) -> Types {
-    let env = env::new_env(None);
-
-    core::setup_core_environment(&env);
-
-    let mut tokens = tokenizer::tokenize(program);
-
-    let ast = parser::parse(&mut tokens);
-
-    return ast.iter().fold(Types::Nil, |_state, t| {
-        evaluator::evaluate(env.clone(), t.clone())
-    });
-}
-
-fn assert_eq(assertion: &str, expected: Types) {
-    match (evaluate(assertion), expected) {
-        (Integer(a), Integer(b)) => assert_eq!(a, b),
-        (Float(a), Float(b)) => assert_eq!(a, b),
-        _ => panic!("Incompatible types"),
-    }
-}
+mod common;
+use common::assert_eq;
+use myla::core::types::Types::Integer;
 
 #[test]
 fn test_defined_functions() {
@@ -34,14 +8,14 @@ fn test_defined_functions() {
         (def add (fn [a b] (+ a b)))
         (add 1 2)";
 
-    assert_eq(program, Types::Integer(3));
+    assert_eq(program, Integer(3));
 }
 
 #[test]
 fn test_anonymous_functions() {
     let program = "((fn [a b] (* a b)) 4 5)";
 
-    assert_eq(program, Types::Integer(20));
+    assert_eq(program, Integer(20));
 }
 
 #[test]
@@ -55,12 +29,13 @@ fn test_functions_with_multiexpression_bodies() {
 
             (multi_body 1)";
 
-        assert_eq(program, Types::Integer(1));
+        assert_eq(program, Integer(1));
     }
     {
-        let program = "((fn [i] (let [x 1] (+ x x) i)))";
+        let program = "
+            ((fn [i] (let [a i] (+ i i) a)) 1)";
 
-        assert_eq(program, Types::Integer(1));
+        assert_eq(program, Integer(1));
     }
 }
 
@@ -76,12 +51,12 @@ fn test_functions_using_let() {
 
             (shifter 6)";
 
-        assert_eq(program, Types::Integer(24));
+        assert_eq(program, Integer(24));
     }
     {
         let program = "((fn [i] (let [x (* i i) y (+ i i) z (- x y)] z)) 6)";
 
-        assert_eq(program, Types::Integer(24));
+        assert_eq(program, Integer(24));
     }
 }
 
@@ -93,11 +68,11 @@ fn test_functions_without_params() {
 
             (function_without_params)";
 
-        assert_eq(program, Types::Integer(1));
+        assert_eq(program, Integer(1));
     }
     {
         let program = "((fn [] 1))";
 
-        assert_eq(program, Types::Integer(1));
+        assert_eq(program, Integer(1));
     }
 }
