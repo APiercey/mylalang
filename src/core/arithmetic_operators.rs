@@ -3,12 +3,7 @@ use crate::core::types::{vec_to_vector, Types};
 pub fn add(first: &Types, second: &Types) -> Types {
     return match (first, second) {
         (Types::Integer(a), Types::Integer(b)) => Types::Integer(a + b),
-        (Types::Float(a), Types::Float(b)) => {
-            println!("{}", a);
-            println!("{}", b);
-            println!("{}", a + b);
-            return Types::Float(a + b);
-        }
+        (Types::Float(a), Types::Float(b)) => Types::Float(a + b),
         (Types::Float(a), Types::Integer(b)) => Types::Float(a + (b.clone() as f64)),
         (Types::Integer(a), Types::Float(b)) => Types::Float((a.clone() as f64) + b),
         (Types::String(a), Types::String(b)) => Types::String(format!("{}{}", a, b)),
