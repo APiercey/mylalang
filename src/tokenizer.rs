@@ -155,6 +155,10 @@ fn tokenize_number_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>
             value: vec![],
         },
         Some(x) => match x {
+            '-' => {
+                acc.push(x);
+                tokenize_number_r(acc, input)
+            }
             '0'..='9' | '.' => {
                 acc.push(x);
                 tokenize_number_r(acc, input)
@@ -163,10 +167,17 @@ fn tokenize_number_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>
                 acc.push(x);
                 tokenize_number_r(acc, input)
             }
-            _ if { acc.len() > 0 } => Token {
-                consumes: acc.len(),
-                kind: Kinds::Number,
-                value: acc.to_vec(),
+            _ if { acc.len() > 0 } => match (acc[0], acc.len()) {
+                ('-', 1) => Token {
+                    consumes: 0,
+                    kind: Kinds::Null,
+                    value: vec![],
+                },
+                (_, _) => Token {
+                    consumes: acc.len(),
+                    kind: Kinds::Number,
+                    value: acc.to_vec(),
+                },
             },
             _ => Token {
                 consumes: 0,
@@ -264,11 +275,11 @@ pub fn tokenize(full_prg: &str) -> Vec<Token> {
         &tokenize_new_line,
         &tokenize_opening_param,
         &tokenize_closing_param,
+        &tokenize_number,
         &tokenize_operator,
         &tokenize_opening_vector_bracket,
         &tokenize_closing_vector_bracket,
         &tokenize_string,
-        &tokenize_number,
         &tokenize_word,
     ];
 

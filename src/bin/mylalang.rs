@@ -13,7 +13,7 @@ fn main() {
     let contents = fs::read_to_string(filename).expect("Something went wrong reading the file");
     let env = env::new_env(None);
 
-    core::set_core_functions(&env);
+    core::setup_core_environment(&env);
 
     let mut tokens = tokenizer::tokenize(contents.as_str());
 

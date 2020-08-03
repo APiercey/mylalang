@@ -13,7 +13,7 @@ fn main() {
     }
 
     let env = env::new_env(None);
-    core::set_core_functions(&env);
+    core::setup_core_environment(&env);
 
     loop {
         let readline = rl.readline("imy> ");
