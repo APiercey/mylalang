@@ -1,5 +1,6 @@
 mod common;
 use common::assert_eq;
+// use myla::core::types::vec_to_list;
 use myla::core::types::Types::{Bool, Float, Integer, String as Str};
 
 #[test]
@@ -29,8 +30,5 @@ fn test_defining_bools() {
 // TODO: implement Eq matching for complex structures
 // #[test]
 // fn test_defining_vectors() {
-//     assert_eq(
-//         "(def coll [1 2 3])(inspect coll)",
-//         vec_to_list(vec![Integer(1), Integer(2), Integer(3)]),
-//     );
+//     assert_eq("(def coll [])(inspect coll)", vec_to_list(vec![]));
 // }

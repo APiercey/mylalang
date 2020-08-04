@@ -97,7 +97,7 @@ fn tokenize_operator_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = cha
                 acc.push(x);
                 tokenize_operator_r(acc, input)
             }
-            '+' | '-' | '*' | '/' | '=' => Token {
+            '+' | '-' | '*' | '/' | '=' | ':' => Token {
                 consumes: 1,
                 kind: Kinds::Word,
                 value: vec![x],
