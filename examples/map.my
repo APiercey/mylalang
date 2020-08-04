@@ -4,7 +4,3 @@
     (: (f h) (if (empty? t) t (map f t))))))
 
 (def double (fn [i] (+ i i)))
-
-(inspect (map double "abc"))
-(inspect (map double [8 2 123]))
-

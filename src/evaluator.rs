@@ -1,5 +1,7 @@
 use crate::core::env::{get_env, set_env, Env};
 use crate::core::types::Types;
+use crate::evaluate as root_evaluate;
+use std::fs;
 use std::rc::Rc;
 
 fn evaluate_bool_value(ast: Types) -> bool {
@@ -23,6 +25,16 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                     return result.apply(params);
                 }
                 Types::Word(word) => match word.as_str() {
+                    "import" => match l[1].clone() {
+                        Types::String(import_path) => {
+                            let contents = fs::read_to_string(import_path.clone()).expect(
+                                format!("Could not import {:?}", import_path.as_str()).as_str(),
+                            );
+
+                            root_evaluate(&env, contents.as_str())
+                        }
+                        _ => panic!("Expected a path name for a string"),
+                    },
                     "def" => {
                         let def_name = l[1].clone();
                         let def_value = l[2].clone();
