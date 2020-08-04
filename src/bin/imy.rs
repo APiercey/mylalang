@@ -1,5 +1,6 @@
 use myla::core;
 use myla::core::env;
+use myla::native;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
 
@@ -11,6 +12,7 @@ fn main() {
 
     let env = env::new_env(None);
     core::setup_core_environment(&env);
+    native::load(&env);
 
     loop {
         let readline = rl.readline("imy> ");

@@ -1,0 +1,12 @@
+(def add (fn [a b] (+ a b)))
+(def subtract (fn [a b] (- a b)))
+(def multiply (fn [a b] (* a b)))
+(def divide (fn [a b] (/ a b)))
+
+(def map (fn [f coll] 
+  (let [h (head coll)
+        t (tail coll)] 
+    (: (f h) (if (empty? t) t (map f t))))))
+
+(def double (fn [i] (+ i i)))
+
