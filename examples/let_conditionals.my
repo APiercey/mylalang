@@ -3,5 +3,3 @@
         y (+ i i)
         z (if (> x 50) (- x y) (+ x y))]
     (+ "Final value is " z))))
-
-(inspect (shifter 5))

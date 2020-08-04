@@ -1,11 +1,13 @@
 use myla::core;
 use myla::core::types::Types;
 use myla::core::types::Types::{Bool, Float, Integer, Nil, String as Str};
+use myla::native;
 
 fn evaluate(assertion: &str) -> Types {
     let env = core::env::new_env(None);
 
-    core::setup_core_environment(&env);
+    core::load(&env);
+    native::load(&env);
 
     return myla::evaluate(&env, assertion);
 }

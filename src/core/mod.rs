@@ -75,7 +75,7 @@ fn empty(item: &Types) -> Types {
     };
 }
 
-pub fn setup_core_environment(env: &Env) {
+pub fn load(env: &Env) {
     set_types(&env);
 
     set_env(

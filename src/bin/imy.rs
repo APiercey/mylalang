@@ -11,7 +11,7 @@ fn main() {
     }
 
     let env = env::new_env(None);
-    core::setup_core_environment(&env);
+    core::load(&env);
     native::load(&env);
 
     loop {
