@@ -9,4 +9,3 @@
     (: (f h) (if (empty? t) t (map f t))))))
 
 (def double (fn [i] (+ i i)))
-

@@ -77,6 +77,13 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
 
                         return result;
                     }
+                    "do" => {
+                        let result = l[1..]
+                            .iter()
+                            .fold(Types::Nil, |_state, t| evaluate(env.clone(), t.clone()));
+
+                        return result;
+                    }
                     "fn" => {
                         let params = l[1].clone();
                         let body = l[2].clone();
