@@ -9,3 +9,18 @@
     (: (f h) (if (empty? t) t (map f t))))))
 
 (def double (fn [i] (+ i i)))
+
+(def foldl (fn [f acc coll] 
+  (let [x (f acc (head coll))
+        xs (tail coll)]
+    (if (empty? xs) 
+      x 
+      (foldl f x xs)))))
+
+; Is this impl correct?
+(def foldr (fn [f acc coll] 
+  (let [x (f (head coll) acc)
+        xs (tail coll)]
+    (if (empty? xs) 
+      x 
+      (foldl f x xs)))))
