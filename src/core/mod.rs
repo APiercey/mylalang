@@ -1,11 +1,13 @@
 mod arithmetic_operators;
 pub mod comparison_operators;
 pub mod env;
+mod file_functions;
 mod output_functions;
 pub mod types;
 use crate::core::arithmetic_operators::{add, divide, multiply, subtract};
 use crate::core::comparison_operators::{eq, gt, gt_or_eq, lt, lt_or_eq};
 use crate::core::env::{set_env, Env};
+use crate::core::file_functions::read_from_file;
 use crate::core::output_functions::inspect;
 use crate::core::types::{define_function, vec_to_vector, Types, VArgs};
 
@@ -150,5 +152,11 @@ pub fn load(env: &Env) {
         &env,
         "empty?",
         define_function(|args: VArgs| empty(&args[0])),
+    );
+
+    set_env(
+        &env,
+        "readfile",
+        define_function(|args: VArgs| read_from_file(&args[0])),
     );
 }

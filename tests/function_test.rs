@@ -77,14 +77,13 @@ fn test_functions_without_params() {
     }
 }
 
-#[test]
-fn test_variadic_functions() {
-    {
-        let program = "
-            (def variadic_f (fn [a & rest] rest))
+// TODO: Test lists...
+// #[test]
+// fn test_variadic_functions() {
+//     {
+//         let program = "
+//             (def variadic_f (fn [a & rest] rest))
 
-            (variadic_f 1 2)";
-
-        assert_eq(program, Integer(1));
-    }
-}
+//             (variadic_f 1 2)";
+//     }
+// }
