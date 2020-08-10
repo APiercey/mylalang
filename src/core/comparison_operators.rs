@@ -77,3 +77,11 @@ pub fn gt_or_eq(left: &Types, right: &Types) -> Types {
         (_, _) => panic!("Cannot compare"),
     }
 }
+
+pub fn empty(item: &Types) -> Types {
+    return match item {
+        Types::String(s) => Types::Bool(s.as_str().len() == 0),
+        Types::Vector(s) => Types::Bool(s.len() == 0),
+        a => panic!("Cannot get the tail of {:?}", a),
+    };
+}

@@ -1,0 +1,3 @@
+(def import (fn [file_name] 
+  (let [contents (readfile file_name)]
+    (eval contents))))
