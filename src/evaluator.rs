@@ -25,6 +25,10 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                     return result.apply(params);
                 }
                 Types::Word(word) => match word.as_str() {
+                    "eval" => match l[1].clone() {
+                        Types::String(program) => root_evaluate(&env, program.as_str()),
+                        _ => panic!("Expected a string to evaluate"),
+                    },
                     "import" => match l[1].clone() {
                         Types::String(import_path) => {
                             let contents = fs::read_to_string(import_path.clone()).expect(
