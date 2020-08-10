@@ -1,6 +1,6 @@
 mod common;
 use common::assert_eq;
-use myla::core::types::Types::{Bool, Float, Integer, Nil, String as Str};
+use myla::core::types::Types::{String as Str};
 
 #[test]
 fn test_reading_a_file() {
