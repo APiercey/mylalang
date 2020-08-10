@@ -252,6 +252,14 @@ fn tokenize_word_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) 
                 acc.push(x);
                 tokenize_word_r(acc, input)
             }
+            '&' => {
+                acc.push('&');
+                Token {
+                    consumes: acc.len(),
+                    kind: Kinds::Word,
+                    value: acc.to_vec(),
+                }
+            }
             _ if { acc.len() > 0 } => Token {
                 consumes: acc.len(),
                 kind: Kinds::Word,

@@ -76,3 +76,15 @@ fn test_functions_without_params() {
         assert_eq(program, Integer(1));
     }
 }
+
+#[test]
+fn test_variadic_functions() {
+    {
+        let program = "
+            (def variadic_f (fn [a & rest] rest))
+
+            (variadic_f 1 2)";
+
+        assert_eq(program, Integer(1));
+    }
+}

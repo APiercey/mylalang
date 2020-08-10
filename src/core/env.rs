@@ -1,4 +1,4 @@
-use crate::core::types::{TypeResult, Types};
+use crate::core::types::{vec_to_list, TypeResult, Types};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -30,19 +30,34 @@ pub fn env_find(env: &Env, key: &str) -> Option<Env> {
     }
 }
 
+// TODO: Rewrite this function so that it is compatible with & operator
+//
 pub fn env_bind(env: &Env, bindings: Types, values: Vec<Types>) -> Env {
     let new_env = new_env(Some(env.clone()));
 
     match bindings {
         Types::Vector(v) => {
-            for (i, b) in v.iter().enumerate() {
+            let mut iter = v.iter().enumerate();
+
+            while let Some((i, b)) = iter.next() {
                 match b {
-                    Types::Word(w) => set_env(&env, &w, values[i].clone()),
+                    Types::Word(w) => match w.as_str() {
+                        "&" => {
+                            match iter.next() {
+                                Some((_, Types::Word(rest))) => {
+                                    set_env(&env, &rest, vec_to_list(values[i..].to_vec()))
+                                }
+                                _ => panic!("hmm"),
+                            }
+                            break;
+                        }
+                        _ => set_env(&env, &w, values[i].clone()),
+                    },
                     _ => panic!("Currently unexpected"),
                 }
             }
         }
-        _ => panic!("Not expected"),
+        _ => panic!("Bindings are expected to be wrapped in a vector"),
     }
 
     return new_env;
