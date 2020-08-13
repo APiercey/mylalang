@@ -30,6 +30,12 @@ pub fn env_find(env: &Env, key: &str) -> Option<Env> {
     }
 }
 
+pub fn env_is_defined(env: &Env, key: &str) -> bool {
+    match env_find(&env, &key) {
+        Some(_) => true,
+        None => false,
+    }
+}
 // TODO: Rewrite this function so that it is compatible with & operator
 //
 pub fn env_bind(env: &Env, bindings: Types, values: Vec<Types>) -> Env {

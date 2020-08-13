@@ -1,4 +1,4 @@
-use crate::core::env::{get_env, set_env, Env};
+use crate::core::env::{env_is_defined, get_env, set_env, Env};
 use crate::core::types::Types;
 use crate::evaluate as root_evaluate;
 use std::rc::Rc;
@@ -71,11 +71,55 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         let def_value = l[2].clone();
 
                         match def_name {
-                            Types::Word(ref def_name_value) => set_env(
-                                &env,
-                                &def_name_value,
-                                evaluate(env.clone(), def_value.clone()),
-                            ),
+                            Types::Word(ref def_name_value) => {
+                                let evaluated_value = evaluate(env.clone(), def_value.clone());
+
+                                match evaluated_value {
+                                    Types::Lambda { .. } => {
+                                        //
+
+                                        match env_is_defined(&env, &def_name_value.as_str()) {
+                                            true => match get_env(&env, &def_name) {
+                                                Ok(varfunc) => match varfunc {
+                                                    Types::VariadicFunc { ref lambdas, .. } => {
+                                                        let mut new_lambdas = lambdas.clone();
+                                                        new_lambdas.push(evaluated_value);
+                                                        set_env(
+                                                            &env,
+                                                            &def_name_value,
+                                                            evaluate(
+                                                                env.clone(),
+                                                                Types::VariadicFunc {
+                                                                    lambdas: new_lambdas,
+                                                                },
+                                                            ),
+                                                        )
+                                                    }
+                                                    _ => {
+                                                        panic!("expected a function to be defined")
+                                                    }
+                                                },
+                                                _ => panic!("expected value"),
+                                            },
+                                            false => set_env(
+                                                &env,
+                                                &def_name_value,
+                                                evaluate(
+                                                    env.clone(),
+                                                    Types::VariadicFunc {
+                                                        lambdas: vec![evaluated_value],
+                                                    },
+                                                ),
+                                            ),
+                                        }
+                                    }
+                                    _ => set_env(
+                                        &env,
+                                        &def_name_value,
+                                        evaluate(env.clone(), def_value.clone()),
+                                    ),
+                                }
+                            }
                             _ => panic!("Unexpected input"),
                         };
 
@@ -170,6 +214,28 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                                 }
 
                                 t.apply(args)
+                            }
+                            Types::VariadicFunc { lambdas, .. } => {
+                                let mut args = vec![];
+                                let mut iter = l[1..].iter();
+
+                                while let Some(next) = iter.next() {
+                                    let result = evaluate(env.clone(), next.clone());
+                                    args.push(result);
+                                }
+
+                                let func = match lambdas
+                                    .into_iter()
+                                    .filter(|f: &Types| f.is_lambda())
+                                    .find(|f: &Types| f.arity() == args.len())
+                                {
+                                    Some(f) => f,
+                                    None => panic!("No function matches"),
+                                };
+
+                                println!("CALLED");
+
+                                func.apply(args)
                             }
                             _ => panic!("Expected function"),
                         }

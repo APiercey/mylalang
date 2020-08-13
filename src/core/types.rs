@@ -19,6 +19,9 @@ pub enum Types {
         params: Rc<Types>,
         body: Rc<Types>,
     },
+    VariadicFunc {
+        lambdas: Vec<Types>, // Is it possible to reference only Lambdas? e.g. Vec<Types::Lambda>
+    },
 }
 
 pub type ErrMessage = String;
@@ -44,6 +47,32 @@ impl Types {
         };
     }
 
+    pub fn arity(&self) -> usize {
+        match *self {
+            Types::Lambda { ref params, .. } => match &**params {
+                Types::Vector(vector) => vector.len(), // Should this filter binding character (&)?
+                _ => panic!("Expected a list of parameters"),
+            },
+            _ => panic!("No apply"),
+        }
+    }
+
+    pub fn is_lambda(&self) -> bool {
+        match *self {
+            Types::Lambda { .. } => true,
+            _ => false,
+        }
+    }
+
+    // pub fn add_lambda(&self) {
+    //     match *self {
+    //         Types::VariadicFunc { ref mut lambdas, .. } => {
+    //             lambdas.push
+    //         }
+    //     }
+
+    // }
+
     pub fn inspect(&self) -> String {
         return match *self {
             Types::Func(f) => format!("<#func {:?}>", f),
@@ -56,6 +85,7 @@ impl Types {
             Types::Bool(b) => format!("{}", b),
             Types::Nil => format!("nil"),
             Types::Lambda { ref params, .. } => format!("<#anonfunc {:?}>", params),
+            Types::VariadicFunc { ref lambdas, .. } => format!("<#varfunc {:?}>", lambdas.len()),
         };
     }
 }
