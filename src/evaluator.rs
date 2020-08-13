@@ -28,7 +28,7 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         let t = evaluate(env.clone(), l[1].clone());
 
                         return match t {
-                            Types::Func(_) | Types::DefFunc { .. } => {
+                            Types::Func(_) | Types::Lambda { .. } => {
                                 let mut params: Vec<Types> = vec![];
 
                                 let mut iter = l[2..].iter();
@@ -119,7 +119,7 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         let params = l[1].clone();
                         let body = l[2].clone();
 
-                        let f = Types::DefFunc {
+                        let f = Types::Lambda {
                             eval: evaluate,
                             env: env.clone(),
                             params: Rc::new(params),
@@ -160,7 +160,7 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         let t = evaluate(env.clone(), action.clone());
 
                         match t {
-                            Types::Func(_) | Types::DefFunc { .. } => {
+                            Types::Func(_) | Types::Lambda { .. } => {
                                 let mut args = vec![];
                                 let mut iter = l[1..].iter();
 

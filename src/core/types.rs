@@ -13,7 +13,7 @@ pub enum Types {
     Bool(bool),
     Nil,
     Func(fn(VArgs) -> Types),
-    DefFunc {
+    Lambda {
         eval: fn(env: Env, ast: Types) -> Types,
         env: Env,
         params: Rc<Types>,
@@ -27,7 +27,7 @@ impl Types {
     pub fn apply(&self, args: VArgs) -> Types {
         return match *self {
             Types::Func(f) => f(args),
-            Types::DefFunc {
+            Types::Lambda {
                 ref params,
                 ref env,
                 ref body,
@@ -55,7 +55,7 @@ impl Types {
             Types::Word(ref w) => format!("<#def {:?}>", w),
             Types::Bool(b) => format!("{}", b),
             Types::Nil => format!("nil"),
-            Types::DefFunc { ref params, .. } => format!("<#anonfunc {:?}>", params),
+            Types::Lambda { ref params, .. } => format!("<#anonfunc {:?}>", params),
         };
     }
 }
