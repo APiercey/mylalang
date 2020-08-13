@@ -77,6 +77,37 @@ fn test_functions_without_params() {
     }
 }
 
+#[test]
+fn test_variadic_functions() {
+    {
+        let program = "
+            (def growth (fn [a] (* a a)))
+            (def growth (fn [a b] (* a b)))
+            (def growth (fn [a b c] (* a (* b c))))
+            (growth 2)";
+
+        assert_eq(program, Integer(4));
+    }
+    {
+        let program = "
+            (def growth (fn [a] (* a a)))
+            (def growth (fn [a b] (* a b)))
+            (def growth (fn [a b c] (* a (* b c))))
+            (growth 2 3)";
+
+        assert_eq(program, Integer(6));
+    }
+    {
+        let program = "
+            (def growth (fn [a] (* a a)))
+            (def growth (fn [a b] (* a b)))
+            (def growth (fn [a b c] (* a (* b c))))
+            (growth 2 3 4)";
+
+        assert_eq(program, Integer(24));
+    }
+}
+
 // TODO: Test lists...
 // #[test]
 // fn test_variadic_functions() {
