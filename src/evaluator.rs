@@ -24,6 +24,35 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                     return result.apply(params);
                 }
                 Types::Word(word) => match word.as_str() {
+                    "apply" => {
+                        let t = evaluate(env.clone(), l[1].clone());
+
+                        return match t {
+                            Types::Func(_) | Types::DefFunc { .. } => {
+                                let mut params: Vec<Types> = vec![];
+
+                                let mut iter = l[2..].iter();
+
+                                while let Some(a) = iter.next() {
+                                    match evaluate(env.clone(), a.clone()) {
+                                        Types::List(list) => {
+                                            let mut iter = list.iter();
+
+                                            while let Some(v) = iter.next() {
+                                                params.push(evaluate(env.clone(), v.clone()));
+                                            }
+                                        }
+                                        _ => {
+                                            params.push(evaluate(env.clone(), a.clone()));
+                                        }
+                                    };
+                                }
+
+                                t.apply(params)
+                            }
+                            _ => panic!("Expected a function for apply"),
+                        };
+                    }
                     "eval" => {
                         let program = match l[1].clone() {
                             Types::String(program) => program,

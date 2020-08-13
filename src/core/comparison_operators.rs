@@ -81,7 +81,8 @@ pub fn gt_or_eq(left: &Types, right: &Types) -> Types {
 pub fn empty(item: &Types) -> Types {
     return match item {
         Types::String(s) => Types::Bool(s.as_str().len() == 0),
-        Types::Vector(s) => Types::Bool(s.len() == 0),
-        a => panic!("Cannot get the tail of {:?}", a),
+        Types::Vector(v) => Types::Bool(v.len() == 0),
+        Types::List(l) => Types::Bool(l.len() == 0),
+        a => panic!("Cannot check if {:?} is empty", a),
     };
 }

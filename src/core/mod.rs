@@ -7,7 +7,7 @@ mod output_functions;
 pub mod types;
 use crate::core::arithmetic_operators::{add, divide, multiply, subtract};
 use crate::core::comparison_operators::{empty, eq, gt, gt_or_eq, lt, lt_or_eq};
-use crate::core::construction_functions::{cons, head, tail};
+use crate::core::construction_functions::{cons, head, list, tail};
 use crate::core::env::{set_env, Env};
 use crate::core::file_functions::read_from_file;
 use crate::core::output_functions::inspect;
@@ -85,6 +85,8 @@ pub fn load(env: &Env) {
         ":",
         define_function(|args: VArgs| cons(&args[0], &args[1])),
     );
+
+    set_env(&env, "list", define_function(|args: VArgs| list(&args)));
 
     set_env(&env, "head", define_function(|args: VArgs| head(&args[0])));
     set_env(&env, "tail", define_function(|args: VArgs| tail(&args[0])));

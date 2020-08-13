@@ -1,7 +1,8 @@
 use crate::core::env::{env_bind, Env};
+use std::fmt;
 use std::rc::Rc;
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub enum Types {
     Integer(isize),
     Word(String),
@@ -56,6 +57,12 @@ impl Types {
             Types::Nil => format!("nil"),
             Types::DefFunc { ref params, .. } => format!("<#anonfunc {:?}>", params),
         };
+    }
+}
+
+impl fmt::Debug for Types {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.inspect())
     }
 }
 

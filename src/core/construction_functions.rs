@@ -1,4 +1,4 @@
-use crate::core::types::{vec_to_vector, Types};
+use crate::core::types::{vec_to_list, vec_to_vector, Types, VArgs};
 
 pub fn cons(head: &Types, tail: &Types) -> Types {
     return match (head, tail) {
@@ -7,6 +7,11 @@ pub fn cons(head: &Types, tail: &Types) -> Types {
             let mut new_construct = (**b).clone();
             new_construct.insert(0, a.clone());
             vec_to_vector(new_construct)
+        }
+        (a, Types::List(ref b)) => {
+            let mut new_construct = (**b).clone();
+            new_construct.insert(0, a.clone());
+            vec_to_list(new_construct)
         }
         (a, b) => panic!("Cannot cons {:?} into {:?}", a, b),
     };
@@ -50,4 +55,8 @@ pub fn tail(item: &Types) -> Types {
         }
         a => panic!("Cannot get the tail of {:?}", a),
     };
+}
+
+pub fn list(args: &VArgs) -> Types {
+    vec_to_list(args.clone())
 }
