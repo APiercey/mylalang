@@ -28,7 +28,7 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         let t = evaluate(env.clone(), l[1].clone());
 
                         return match t {
-                            Types::Func(_) | Types::Lambda { .. } => {
+                            Types::Func(_) | Types::Lambda { .. } | Types::VariadicFunc { .. } => {
                                 let mut params: Vec<Types> = vec![];
 
                                 let mut iter = l[2..].iter();
@@ -50,7 +50,10 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
 
                                 t.apply(params)
                             }
-                            _ => panic!("Expected a function for apply"),
+                            _ => {
+                                println!("ttt {:?}", t);
+                                panic!("Expected a function for apply")
+                            }
                         };
                     }
                     "eval" => {
@@ -196,7 +199,7 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         let t = evaluate(env.clone(), action.clone());
 
                         match t {
-                            Types::Func(_) | Types::Lambda { .. } => {
+                            Types::Func(_) | Types::Lambda { .. } | Types::VariadicFunc { .. } => {
                                 let mut args = vec![];
                                 let mut iter = l[1..].iter();
 
@@ -206,30 +209,6 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                                 }
 
                                 t.apply(args)
-                            }
-                            Types::VariadicFunc { lambdas, .. } => {
-                                let mut args = vec![];
-                                let mut iter = l[1..].iter();
-
-                                while let Some(next) = iter.next() {
-                                    let result = evaluate(env.clone(), next.clone());
-                                    args.push(result);
-                                }
-
-                                let func = match lambdas.clone().into_iter().filter(|f: &Types| f.is_lambda()).find(|f: &Types| f.arity() == args.len()) {
-                                    Some(f) => f,
-                                    None => match lambdas.clone().into_iter().filter(|f: &Types| f.is_lambda()).last() {
-                                        Some(f) => match f.is_variadic() {
-                                            true => f,
-                                            false => {
-                                                panic!("No function matching parameter signature Err. No 3")
-                                            }
-                                        },
-                                        None => panic!("No function matching parameter signature Err. No 2")
-                                    },
-                                };
-
-                                func.apply(args)
                             }
                             _ => panic!("No function matching parameter signature Err. No 1"),
                         }

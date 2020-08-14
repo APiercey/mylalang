@@ -1,20 +1,35 @@
+(def add (fn [] 0))
+(def add (fn [a] a))
 (def add (fn [a b] (+ a b)))
+(def add (fn [a b & rest] (apply add (add a b) rest)))
+
+(def subtract (fn [] 0))
+(def subtract (fn [a] (* a -1)))
 (def subtract (fn [a b] (- a b)))
+(def subtract (fn [a b & rest] (apply subtract (subtract a b) rest)))
+
+(def multiply (fn [] 1))
+(def multiply (fn [a] a))
 (def multiply (fn [a b] (* a b)))
+(def multiply (fn [a b & rest] (apply multiply (multiply a b) rest)))
+
+(def divide (fn [a] a))
 (def divide (fn [a b] (/ a b)))
+(def divide (fn [a b & rest] (apply divide (divide a b) rest)))
 
 (def map (fn [f h & t] 
   (let [x (f h)
-        xs (if (empty? t) t (apply map f t))] (: x xs))))
+        xs (if (empty? t) t (apply map f t))]
+          (: x xs))))
 
 (def double (fn [i] (+ i i)))
 
 (def foldl (fn [f acc coll] 
   (let [x (f acc (head coll))
         xs (tail coll)]
-    (if (empty? xs) 
-      x 
-      (foldl f x xs)))))
+          (if (empty? xs) 
+            x 
+            (foldl f x xs)))))
 
 ; Is this impl correct?
 (def foldr (fn [f acc coll] 

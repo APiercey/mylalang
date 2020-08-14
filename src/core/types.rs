@@ -43,6 +43,30 @@ impl Types {
 
                 return eval(fun_env, b.clone());
             }
+            Types::VariadicFunc { ref lambdas, .. } => {
+                let func = match lambdas
+                    .clone()
+                    .into_iter()
+                    .filter(|f: &Types| f.is_lambda())
+                    .find(|f: &Types| f.arity() == args.len())
+                {
+                    Some(f) => f,
+                    None => match lambdas
+                        .clone()
+                        .into_iter()
+                        .filter(|f: &Types| f.is_lambda())
+                        .last()
+                    {
+                        Some(f) => match f.is_variadic() {
+                            true => f,
+                            false => panic!("No function matching parameter signature Err. No 3"),
+                        },
+                        None => panic!("No function matching parameter signature Err. No 2"),
+                    },
+                };
+
+                func.apply(args)
+            }
             _ => panic!("No apply"),
         };
     }
