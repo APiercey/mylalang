@@ -69,52 +69,52 @@ fn tokenize_character(kind: Kinds, character: char, input: &str) -> Token {
     };
 }
 
-fn tokenize_operator(input: &str) -> Token {
-    let mut acc = vec![];
-    let mut chars = input.chars();
+// fn tokenize_operator(input: &str) -> Token {
+//     let mut acc = vec![];
+//     let mut chars = input.chars();
 
-    return tokenize_operator_r(&mut acc, &mut chars);
-}
+//     return tokenize_operator_r(&mut acc, &mut chars);
+// }
 
-fn tokenize_operator_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) -> Token {
-    return match input.next() {
-        None => Token {
-            consumes: 0,
-            kind: Kinds::Null,
-            value: vec![],
-        },
-        Some(x) => match x {
-            '=' if { acc.len() > 0 } => {
-                acc.push(x);
+// fn tokenize_operator_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) -> Token {
+//     return match input.next() {
+//         None => Token {
+//             consumes: 0,
+//             kind: Kinds::Null,
+//             value: vec![],
+//         },
+//         Some(x) => match x {
+//             '=' if { acc.len() > 0 } => {
+//                 acc.push(x);
 
-                return Token {
-                    consumes: acc.len(),
-                    kind: Kinds::Word,
-                    value: acc.to_vec(),
-                };
-            }
-            '>' | '<' => {
-                acc.push(x);
-                tokenize_operator_r(acc, input)
-            }
-            '+' | '-' | '*' | '/' | '=' | ':' => Token {
-                consumes: 1,
-                kind: Kinds::Word,
-                value: vec![x],
-            },
-            _ if { acc.len() > 0 } => Token {
-                consumes: acc.len(),
-                kind: Kinds::Word,
-                value: acc.to_vec(),
-            },
-            _ => Token {
-                consumes: 0,
-                kind: Kinds::Null,
-                value: vec![],
-            },
-        },
-    };
-}
+//                 return Token {
+//                     consumes: acc.len(),
+//                     kind: Kinds::Word,
+//                     value: acc.to_vec(),
+//                 };
+//             }
+//             '>' | '<' => {
+//                 acc.push(x);
+//                 tokenize_operator_r(acc, input)
+//             }
+//             '+' | '-' | '*' | '/' | '=' | ':' => Token {
+//                 consumes: 1,
+//                 kind: Kinds::Word,
+//                 value: vec![x],
+//             },
+//             _ if { acc.len() > 0 } => Token {
+//                 consumes: acc.len(),
+//                 kind: Kinds::Word,
+//                 value: acc.to_vec(),
+//             },
+//             _ => Token {
+//                 consumes: 0,
+//                 kind: Kinds::Null,
+//                 value: vec![],
+//             },
+//         },
+//     };
+// }
 
 fn tokenize_whitespace(input: &str) -> Token {
     return tokenize_character(Kinds::Null, ' ', input);
@@ -252,6 +252,10 @@ fn tokenize_word_r(acc: &mut Vec<char>, input: &mut impl Iterator<Item = char>) 
                 acc.push(x);
                 tokenize_word_r(acc, input)
             }
+            '+' | '-' | '*' | '/' | '=' | ':' | '>' | '<' => {
+                acc.push(x);
+                tokenize_word_r(acc, input)
+            }
             '&' => {
                 acc.push('&');
                 Token {
@@ -283,12 +287,11 @@ pub fn tokenize(full_prg: &str) -> Vec<Token> {
         &tokenize_new_line,
         &tokenize_opening_param,
         &tokenize_closing_param,
-        &tokenize_number,
-        &tokenize_operator,
         &tokenize_opening_vector_bracket,
         &tokenize_closing_vector_bracket,
         &tokenize_string,
         &tokenize_word,
+        &tokenize_number,
     ];
 
     // TODO: How to know when there are no chars left ... ?

@@ -1,35 +1,42 @@
-(def add (fn [] 0))
-(def add (fn [a] a))
-(def add (fn [a b] (+ a b)))
-(def add (fn [a b & rest] (apply add (add a b) rest)))
+(def + (fn [] 0))
+(def + (fn [a] a))
+(def + (fn [a b] (add a b)))
+(def + (fn [a b & rest] (apply + (+ a b) rest)))
 
-(def subtract (fn [] 0))
-(def subtract (fn [a] (* a -1)))
-(def subtract (fn [a b] (- a b)))
-(def subtract (fn [a b & rest] (apply subtract (subtract a b) rest)))
+(def - (fn [] 0))
+(def - (fn [a] (* a -1)))
+(def - (fn [a b] (subtract a b)))
+(def - (fn [a b & rest] (apply - (- a b) rest)))
 
-(def multiply (fn [] 1))
-(def multiply (fn [a] a))
-(def multiply (fn [a b] (* a b)))
-(def multiply (fn [a b & rest] (apply multiply (multiply a b) rest)))
+(def * (fn [] 1))
+(def * (fn [a] a))
+(def * (fn [a b] (multiply a b)))
+(def * (fn [a b & rest] (apply * (* a b) rest)))
 
-(def divide (fn [a] a))
-(def divide (fn [a b] (/ a b)))
-(def divide (fn [a b & rest] (apply divide (divide a b) rest)))
+(def / (fn [a] a))
+(def / (fn [a b] (divide a b)))
+(def / (fn [a b & rest] (apply / (/ a b) rest)))
 
-(def map (fn [f h & t] 
-  (let [x (f h)
-        xs (if (empty? t) t (apply map f t))]
-          (: x xs))))
+(def = eq?)
+(def > gt?)
+(def < lt?)
+(def >= gt_or_eq?) ; if OR is implemented, this can be pure myla
+(def <= lt_or_eq?); if OR is implemented, this can be pure myla
 
-(def double (fn [i] (+ i i)))
+; Rebuild map to follow clojure style: https://clojuredocs.org/clojure.core/map
+(def map (fn [f coll]
+  (let [h (f (head coll))
+        t (tail coll)]
+          (: h (if (empty? t) t (map f t))))))
 
-(def foldl (fn [f acc coll] 
-  (let [x (f acc (head coll))
-        xs (tail coll)]
-          (if (empty? xs) 
-            x 
-            (foldl f x xs)))))
+;(def map (fn [f h & t] 
+;  (let [x (f h)
+;        xs (if (empty? t) t (apply map f t))]
+;          (: x xs))))
+
+(def foldl (fn [f a] a))
+(def foldl (fn [f a b] (f a b)))
+(def foldl (fn [f a b & rest] (apply foldl f (f a b) rest)))
 
 ; Is this impl correct?
 (def foldr (fn [f acc coll] 
@@ -38,3 +45,7 @@
     (if (empty? xs) 
       x 
       (foldl f x xs)))))
+
+; I just defined this simply because I wanted
+; a function to play with :) 
+(def double (fn [i] (+ i i)))

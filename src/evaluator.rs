@@ -87,9 +87,17 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                                                     Types::VariadicFunc { ref lambdas, .. } => {
                                                         anon_lambdas = lambdas.clone();
                                                     }
-                                                    _ => {
-                                                        panic!("expected a function to be defined")
+                                                    Types::Word(_) => {
+                                                        match evaluate(env.clone(), varfunc) {
+                                                            Types::VariadicFunc { ref lambdas, .. } => {
+                                                                anon_lambdas = lambdas.clone();
+                                                            }
+                                                            _ => panic!("Expected a variadic function Err. no 2")
+                                                        }
                                                     }
+                                                    _ => panic!(
+                                                        "Expected a variadic function Err. no 1"
+                                                    ),
                                                 },
                                                 _ => panic!("expected value"),
                                             }

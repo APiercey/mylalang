@@ -26,11 +26,18 @@ pub fn head(item: &Types) -> Types {
                 return Types::String("".to_string());
             }
         }
-        Types::Vector(s) => {
-            if s.len() >= 1 {
-                s[0].clone()
+        Types::Vector(v) => {
+            if v.len() >= 1 {
+                v[0].clone()
             } else {
                 vec_to_vector(vec![])
+            }
+        }
+        Types::List(l) => {
+            if l.len() >= 1 {
+                l[0].clone()
+            } else {
+                vec_to_list(vec![])
             }
         }
         a => panic!("Cannot get the head of {:?}", a),
@@ -46,11 +53,18 @@ pub fn tail(item: &Types) -> Types {
                 Types::String("".to_string())
             }
         }
-        Types::Vector(s) => {
-            if s.len() >= 1 {
-                vec_to_vector(s[1..].to_vec())
+        Types::Vector(v) => {
+            if v.len() >= 1 {
+                vec_to_vector(v[1..].to_vec())
             } else {
                 vec_to_vector(vec![])
+            }
+        }
+        Types::List(l) => {
+            if l.len() >= 1 {
+                vec_to_list(l[1..].to_vec())
+            } else {
+                vec_to_list(vec![])
             }
         }
         a => panic!("Cannot get the tail of {:?}", a),

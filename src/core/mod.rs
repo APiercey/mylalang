@@ -22,25 +22,25 @@ pub fn load(env: &Env) {
     // Set runtime functions and operators
     set_env(
         &env,
-        "+",
+        "add",
         define_function(|args: VArgs| add(&args[0], &args[1])),
     );
 
     set_env(
         &env,
-        "-",
+        "subtract",
         define_function(|args: VArgs| subtract(&args[0], &args[1])),
     );
 
     set_env(
         &env,
-        "/",
+        "divide",
         define_function(|args: VArgs| divide(&args[0], &args[1])),
     );
 
     set_env(
         &env,
-        "*",
+        "multiply",
         define_function(|args: VArgs| multiply(&args[0], &args[1])),
     );
 
@@ -52,31 +52,31 @@ pub fn load(env: &Env) {
 
     set_env(
         &env,
-        "=",
+        "eq?",
         define_function(|args: VArgs| eq(&args[0], &args[1])),
     );
 
     set_env(
         &env,
-        ">",
+        "gt?",
         define_function(|args: VArgs| gt(&args[0], &args[1])),
     );
 
     set_env(
         &env,
-        "<",
+        "lt?",
         define_function(|args: VArgs| lt(&args[0], &args[1])),
     );
 
     set_env(
         &env,
-        "<=",
+        "lt_or_eq?",
         define_function(|args: VArgs| lt_or_eq(&args[0], &args[1])),
     );
 
     set_env(
         &env,
-        ">=",
+        "gt_or_eq?",
         define_function(|args: VArgs| gt_or_eq(&args[0], &args[1])),
     );
 
