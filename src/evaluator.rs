@@ -6,6 +6,7 @@ use std::rc::Rc;
 fn evaluate_bool_value(ast: Types) -> bool {
     return match ast {
         Types::Bool(b) => b,
+        Types::Nil => false,
         _ => true,
     };
 }
@@ -188,6 +189,33 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         } else {
                             evaluate(env, if_false_expression)
                         };
+                    }
+                    "or" => {
+                        for item in l[1..].to_vec().into_iter() {
+                            let result = evaluate(env.clone(), item.clone());
+
+                            if evaluate_bool_value(result.clone()) {
+                                return result;
+                            } else {
+                                continue;
+                            }
+                        }
+
+                        return Types::Nil;
+                    }
+                    "and" => {
+                        let result =
+                            l[1..]
+                                .to_vec()
+                                .into_iter()
+                                .fold(Types::Bool(true), |state, t| {
+                                    match evaluate_bool_value(state.clone()) {
+                                        true => evaluate(env.clone(), t.clone()),
+                                        false => state,
+                                    }
+                                });
+
+                        Types::Bool(evaluate_bool_value(result))
                     }
                     "unless" => {
                         let predicate = l[1].clone();
