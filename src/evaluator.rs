@@ -76,42 +76,34 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
 
                                 match evaluated_value {
                                     Types::Lambda { .. } => {
-                                        //
+                                        let mut anon_lambdas = vec![];
 
-                                        match env_is_defined(&env, &def_name_value.as_str()) {
-                                            true => match get_env(&env, &def_name) {
+                                        if env_is_defined(&env, &def_name_value.as_str()) {
+                                            match get_env(&env, &def_name) {
                                                 Ok(varfunc) => match varfunc {
                                                     Types::VariadicFunc { ref lambdas, .. } => {
-                                                        let mut new_lambdas = lambdas.clone();
-                                                        new_lambdas.push(evaluated_value);
-                                                        set_env(
-                                                            &env,
-                                                            &def_name_value,
-                                                            evaluate(
-                                                                env.clone(),
-                                                                Types::VariadicFunc {
-                                                                    lambdas: new_lambdas,
-                                                                },
-                                                            ),
-                                                        )
+                                                        anon_lambdas = lambdas.clone();
                                                     }
                                                     _ => {
                                                         panic!("expected a function to be defined")
                                                     }
                                                 },
                                                 _ => panic!("expected value"),
-                                            },
-                                            false => set_env(
-                                                &env,
-                                                &def_name_value,
-                                                evaluate(
-                                                    env.clone(),
-                                                    Types::VariadicFunc {
-                                                        lambdas: vec![evaluated_value],
-                                                    },
-                                                ),
-                                            ),
+                                            }
                                         }
+
+                                        anon_lambdas.push(evaluated_value.clone());
+
+                                        set_env(
+                                            &env,
+                                            &def_name_value,
+                                            evaluate(
+                                                env.clone(),
+                                                Types::VariadicFunc {
+                                                    lambdas: anon_lambdas,
+                                                },
+                                            ),
+                                        )
                                     }
                                     _ => set_env(
                                         &env,
