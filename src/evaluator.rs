@@ -216,20 +216,22 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                                     args.push(result);
                                 }
 
-                                let func = match lambdas
-                                    .into_iter()
-                                    .filter(|f: &Types| f.is_lambda())
-                                    .find(|f: &Types| f.arity() == args.len())
-                                {
+                                let func = match lambdas.clone().into_iter().filter(|f: &Types| f.is_lambda()).find(|f: &Types| f.arity() == args.len()) {
                                     Some(f) => f,
-                                    None => panic!("No function matches"),
+                                    None => match lambdas.clone().into_iter().filter(|f: &Types| f.is_lambda()).last() {
+                                        Some(f) => match f.is_variadic() {
+                                            true => f,
+                                            false => {
+                                                panic!("No function matching parameter signature Err. No 3")
+                                            }
+                                        },
+                                        None => panic!("No function matching parameter signature Err. No 2")
+                                    },
                                 };
-
-                                println!("CALLED");
 
                                 func.apply(args)
                             }
-                            _ => panic!("Expected function"),
+                            _ => panic!("No function matching parameter signature Err. No 1"),
                         }
                     }
                 },

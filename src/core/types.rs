@@ -50,7 +50,47 @@ impl Types {
     pub fn arity(&self) -> usize {
         match *self {
             Types::Lambda { ref params, .. } => match &**params {
-                Types::Vector(vector) => vector.len(), // Should this filter binding character (&)?
+                Types::Vector(vector) => {
+                    let mut iter = vector.iter();
+                    let mut arity = 0;
+
+                    while let Some(p) = iter.next() {
+                        match p {
+                            Types::Word(ref w) => {
+                                if w.as_str() != "&" {
+                                    arity += 1
+                                }
+                            }
+                            _ => panic!("Currently expected a varialbe assignment"),
+                        }
+                    }
+                    arity
+                }
+                _ => panic!("Expected a list of parameters"),
+            },
+            _ => panic!("No apply"),
+        }
+    }
+
+    pub fn is_variadic(&self) -> bool {
+        match *self {
+            Types::Lambda { ref params, .. } => match &**params {
+                Types::Vector(vector) => {
+                    let mut iter = vector.iter();
+                    let mut is_variadic = false;
+
+                    while let Some(p) = iter.next() {
+                        match p {
+                            Types::Word(ref w) => {
+                                if w.as_str() == "&" {
+                                    is_variadic = true;
+                                }
+                            }
+                            _ => panic!("can not compare values"),
+                        }
+                    }
+                    is_variadic
+                }
                 _ => panic!("Expected a list of parameters"),
             },
             _ => panic!("No apply"),
