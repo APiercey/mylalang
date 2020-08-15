@@ -30,6 +30,13 @@
 ; Constructor Operators
 (def : cons)
 
+; Search
+
+(def min (fn [a] a))
+(def min (fn [a & rest]
+  (let [b (apply min rest)] 
+    (if (<= a b) a b))))
+
 (def map (fn [f coll]
   (let [h (f (head coll))
         t (tail coll)]
