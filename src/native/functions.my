@@ -1,3 +1,4 @@
+; Arithmetic Operators
 (def + (fn [] 0))
 (def + (fn [a] a))
 (def + (fn [a b] (add a b)))
@@ -17,11 +18,17 @@
 (def / (fn [a b] (divide a b)))
 (def / (fn [a b & rest] (apply / (/ a b) rest)))
 
+; Comparison Operators
 (def = eq?)
 (def > gt?)
 (def < lt?)
-(def >= gt_or_eq?) ; if OR is implemented, this can be pure myla
-(def <= lt_or_eq?); if OR is implemented, this can be pure myla
+(def gt_or_eq? (fn [a b] (or (> a b) (= a b))))
+(def lt_or_eq? (fn [a b] (or (< a b) (= a b))))
+(def >= gt_or_eq?)
+(def <= lt_or_eq?)
+
+; Constructor Operators
+(def : cons)
 
 (def map (fn [f coll]
   (let [h (f (head coll))
@@ -32,7 +39,6 @@
 (def foldl (fn [f a] a))
 (def foldl (fn [f a b] (f a b)))
 (def foldl (fn [f a b & rest] (apply foldl f (f a b) rest)))
-
 
 ; Is this impl correct?
 (def foldr (fn [f acc coll] 

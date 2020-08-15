@@ -54,30 +54,6 @@ pub fn lt(left: &Types, right: &Types) -> Types {
     }
 }
 
-pub fn lt_or_eq(left: &Types, right: &Types) -> Types {
-    match (left, right) {
-        (Types::Integer(a), Types::Integer(b)) => Types::Bool(a <= b),
-        (Types::String(a), Types::String(b)) => Types::Bool(a <= b),
-        (Types::Float(a), Types::Float(b)) => Types::Bool(a <= b),
-        (Types::Nil, Types::Nil) => Types::Bool(true),
-        (_, Types::Nil) => Types::Bool(false),
-        (Types::Nil, _) => Types::Bool(true),
-        (a, b) => panic!("Cannot compare {}", format!("{:?}{:?}", a, b)),
-    }
-}
-
-pub fn gt_or_eq(left: &Types, right: &Types) -> Types {
-    match (left, right) {
-        (Types::Integer(a), Types::Integer(b)) => Types::Bool(a >= b),
-        (Types::String(a), Types::String(b)) => Types::Bool(a >= b),
-        (Types::Float(a), Types::Float(b)) => Types::Bool(a >= b),
-        (Types::Nil, Types::Nil) => Types::Bool(true),
-        (_, Types::Nil) => Types::Bool(true),
-        (Types::Nil, _) => Types::Bool(false),
-        (_, _) => panic!("Cannot compare"),
-    }
-}
-
 pub fn empty(item: &Types) -> Types {
     return match item {
         Types::String(s) => Types::Bool(s.as_str().len() == 0),

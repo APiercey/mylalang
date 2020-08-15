@@ -6,7 +6,7 @@ mod file_functions;
 mod output_functions;
 pub mod types;
 use crate::core::arithmetic_operators::{add, divide, multiply, subtract};
-use crate::core::comparison_operators::{empty, eq, gt, gt_or_eq, lt, lt_or_eq};
+use crate::core::comparison_operators::{empty, eq, gt, lt};
 use crate::core::construction_functions::{cons, head, list, tail};
 use crate::core::env::{set_env, Env};
 use crate::core::file_functions::read_from_file;
@@ -70,19 +70,7 @@ pub fn load(env: &Env) {
 
     set_env(
         &env,
-        "lt_or_eq?",
-        define_function(|args: VArgs| lt_or_eq(&args[0], &args[1])),
-    );
-
-    set_env(
-        &env,
-        "gt_or_eq?",
-        define_function(|args: VArgs| gt_or_eq(&args[0], &args[1])),
-    );
-
-    set_env(
-        &env,
-        ":",
+        "cons",
         define_function(|args: VArgs| cons(&args[0], &args[1])),
     );
 

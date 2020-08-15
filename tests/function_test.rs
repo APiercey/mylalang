@@ -5,8 +5,8 @@ use myla::core::types::Types::Integer;
 #[test]
 fn test_defined_functions() {
     let program = "
-        (def add (fn [a b] (+ a b)))
-        (add 1 2)";
+        (def adder (fn [a b] (+ a b)))
+        (adder 1 2)";
 
     assert_eq(program, Integer(3));
 }
@@ -107,14 +107,3 @@ fn test_variadic_functions() {
         assert_eq(program, Integer(24));
     }
 }
-
-// TODO: Test lists...
-// #[test]
-// fn test_variadic_functions() {
-//     {
-//         let program = "
-//             (def variadic_f (fn [a & rest] rest))
-
-//             (variadic_f 1 2)";
-//     }
-// }

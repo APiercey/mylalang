@@ -290,8 +290,8 @@ pub fn tokenize(full_prg: &str) -> Vec<Token> {
         &tokenize_opening_vector_bracket,
         &tokenize_closing_vector_bracket,
         &tokenize_string,
-        &tokenize_word,
         &tokenize_number,
+        &tokenize_word,
     ];
 
     // TODO: How to know when there are no chars left ... ?

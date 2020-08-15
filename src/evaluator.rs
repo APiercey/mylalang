@@ -191,17 +191,14 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
                         };
                     }
                     "or" => {
-                        for item in l[1..].to_vec().into_iter() {
-                            let result = evaluate(env.clone(), item.clone());
+                        let result = l[1..].to_vec().into_iter().find(|t: &Types| {
+                            evaluate_bool_value(evaluate(env.clone(), t.clone()))
+                        });
 
-                            if evaluate_bool_value(result.clone()) {
-                                return result;
-                            } else {
-                                continue;
-                            }
+                        match result {
+                            Some(value) => Types::Bool(evaluate_bool_value(value)),
+                            None => Types::Bool(false),
                         }
-
-                        return Types::Nil;
                     }
                     "and" => {
                         let result =
