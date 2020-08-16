@@ -37,6 +37,11 @@
   (let [b (apply min rest)] 
     (if (<= a b) a b))))
 
+(def max (fn [a] a))
+(def max (fn [a & rest]
+  (let [b (apply max rest)] 
+    (if (>= a b) a b))))
+
 (def map (fn [f coll]
   (let [h (f (head coll))
         t (tail coll)]
