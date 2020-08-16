@@ -36,8 +36,7 @@ pub fn env_is_defined(env: &Env, key: &str) -> bool {
         None => false,
     }
 }
-// TODO: Rewrite this function so that it is compatible with & operator
-//
+
 pub fn env_bind(env: &Env, bindings: Types, values: Vec<Types>) -> Env {
     let new_env = new_env(Some(env.clone()));
 
@@ -51,13 +50,13 @@ pub fn env_bind(env: &Env, bindings: Types, values: Vec<Types>) -> Env {
                         "&" => {
                             match iter.next() {
                                 Some((_, Types::Word(rest))) => {
-                                    set_env(&env, &rest, vec_to_list(values[i..].to_vec()))
+                                    set_env(&new_env, &rest, vec_to_list(values[i..].to_vec()))
                                 }
                                 _ => panic!("hmm"),
                             }
                             break;
                         }
-                        _ => set_env(&env, &w, values[i].clone()),
+                        _ => set_env(&new_env, &w, values[i].clone()),
                     },
                     _ => panic!("Currently unexpected"),
                 }
