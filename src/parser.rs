@@ -1,4 +1,4 @@
-use crate::core::types::{vec_to_list, vec_to_vector, Types};
+use crate::core::types::{vec_to_hash, vec_to_list, vec_to_vector, Types};
 use crate::tokenizer;
 
 fn parse_number(token: &tokenizer::Token) -> Types {
@@ -55,6 +55,19 @@ fn parse_vector(input: &mut std::slice::Iter<tokenizer::Token>) -> Types {
     return vec_to_vector(list);
 }
 
+fn parse_hash(input: &mut std::slice::Iter<tokenizer::Token>) -> Types {
+    let mut list = vec![];
+
+    while let Some(next) = input.next() {
+        match next.kind {
+            tokenizer::Kinds::ClosingHashBracket => break,
+            _ => list.push(parse_token(input, &next)),
+        }
+    }
+
+    return vec_to_hash(list);
+}
+
 fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer::Token) -> Types {
     match token.kind {
         tokenizer::Kinds::Number => parse_number(&token),
@@ -62,6 +75,7 @@ fn parse_token(input: &mut std::slice::Iter<tokenizer::Token>, token: &tokenizer
         tokenizer::Kinds::Word => parse_word(&token),
         tokenizer::Kinds::OpeningParam => parse_expression(input),
         tokenizer::Kinds::OpeningVectorBracket => parse_vector(input),
+        tokenizer::Kinds::OpeningHashBracket => parse_hash(input),
         _ => panic!("Unknown token"),
     }
 }

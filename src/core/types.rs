@@ -1,4 +1,5 @@
 use crate::core::env::{env_bind, Env};
+use std::collections::BTreeMap;
 use std::fmt;
 use std::rc::Rc;
 
@@ -6,6 +7,7 @@ use std::rc::Rc;
 pub enum Types {
     Integer(isize),
     Word(String),
+    Hash(Rc<BTreeMap<String, Types>>),
     List(Rc<Vec<Types>>),
     Vector(Rc<Vec<Types>>),
     String(String),
@@ -128,15 +130,6 @@ impl Types {
         }
     }
 
-    // pub fn add_lambda(&self) {
-    //     match *self {
-    //         Types::VariadicFunc { ref mut lambdas, .. } => {
-    //             lambdas.push
-    //         }
-    //     }
-
-    // }
-
     pub fn inspect(&self) -> String {
         return match *self {
             Types::Func(f) => format!("<#func {:?}>", f),
@@ -145,11 +138,13 @@ impl Types {
             Types::Float(f) => format!("{}", f),
             Types::Vector(ref v) => format!("[{:?}]", v),
             Types::List(ref l) => format!("({:?})", l),
+            Types::Hash(ref h) => format!("{{{:?}}}", h),
             Types::Word(ref w) => format!("<#def {:?}>", w),
             Types::Bool(b) => format!("{}", b),
             Types::Nil => format!("nil"),
             Types::Lambda { ref params, .. } => format!("<#anonfunc {:?}>", params),
             Types::VariadicFunc { ref lambdas, .. } => format!("<#varfunc {:?}>", lambdas.len()),
+            _ => "inspect not found".to_string(),
         };
     }
 }
@@ -170,6 +165,21 @@ pub fn vec_to_list(list: Vec<Types>) -> Types {
 
 pub fn vec_to_vector(vector: Vec<Types>) -> Types {
     return Types::Vector(Rc::new(vector));
+}
+
+pub fn vec_to_hash(hash: Vec<Types>) -> Types {
+    let result = hash
+        .chunks(2)
+        .fold(BTreeMap::new(), |mut state, pair| match pair {
+            [Types::String(s), t] => {
+                state.insert(s.clone(), t.clone());
+                state
+            }
+            &[_, _] => panic!("Currently only strings are supported for hash keys"),
+            _ => panic!("Sorry, unequal pairs"),
+        });
+
+    return Types::Hash(Rc::new(result));
 }
 
 pub fn define_function(fun: fn(VArgs) -> Types) -> Types {

@@ -51,10 +51,7 @@ pub fn evaluate(env: Env, ast: Types) -> Types {
 
                                 t.apply(params)
                             }
-                            _ => {
-                                println!("ttt {:?}", t);
-                                panic!("Expected a function for apply")
-                            }
+                            _ => panic!("Expected a function for apply"),
                         };
                     }
                     "eval" => {

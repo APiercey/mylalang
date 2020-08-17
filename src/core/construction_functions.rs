@@ -40,6 +40,10 @@ pub fn head(item: &Types) -> Types {
                 vec_to_list(vec![])
             }
         }
+        Types::Hash(h) => match h.iter().next() {
+            Some((key, value)) => vec_to_vector(vec![Types::String(key.clone()), value.clone()]),
+            None => vec_to_vector(vec![]),
+        },
         a => panic!("Cannot get the head of {:?}", a),
     };
 }
@@ -67,6 +71,24 @@ pub fn tail(item: &Types) -> Types {
                 vec_to_list(vec![])
             }
         }
+        Types::Hash(h) => match h.iter().next() {
+            Some((skip_key, _)) => {
+                let mut iter = h.iter();
+                let mut matrix = vec![];
+
+                while let Some((key, value)) = iter.next() {
+                    if key != skip_key {
+                        matrix.push(vec_to_vector(vec![
+                            Types::String(key.clone()),
+                            value.clone(),
+                        ]));
+                    }
+                }
+
+                vec_to_vector(matrix)
+            }
+            None => vec_to_vector(vec![]),
+        },
         a => panic!("Cannot get the tail of {:?}", a),
     };
 }
