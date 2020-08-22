@@ -7,7 +7,7 @@ mod output_functions;
 pub mod types;
 use crate::core::arithmetic_operators::{add, divide, multiply, subtract};
 use crate::core::comparison_operators::{empty, eq, gt, lt};
-use crate::core::construction_functions::{cons, head, list, tail};
+use crate::core::construction_functions::{assoc, cons, head, into, list, tail};
 use crate::core::env::{set_env, Env};
 use crate::core::file_functions::read_from_file;
 use crate::core::output_functions::inspect;
@@ -73,6 +73,9 @@ pub fn load(env: &Env) {
         "cons",
         define_function(|args: VArgs| cons(&args[0], &args[1])),
     );
+
+    set_env(&env, "into", define_function(|args: VArgs| into(&args)));
+    set_env(&env, "assoc", define_function(|args: VArgs| assoc(&args)));
 
     set_env(&env, "list", define_function(|args: VArgs| list(&args)));
 

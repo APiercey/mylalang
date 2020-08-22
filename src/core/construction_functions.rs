@@ -1,4 +1,5 @@
-use crate::core::types::{vec_to_list, vec_to_vector, Types, VArgs};
+use crate::core::types::{vec_to_hash, vec_to_list, vec_to_vector, Types, VArgs};
+use std::collections::BTreeMap;
 
 pub fn cons(head: &Types, tail: &Types) -> Types {
     return match (head, tail) {
@@ -91,6 +92,56 @@ pub fn tail(item: &Types) -> Types {
         },
         a => panic!("Cannot get the tail of {:?}", a),
     };
+}
+
+pub fn into(args: &VArgs) -> Types {
+    match args[0] {
+        Types::Hash(ref h) => match args[1].clone() {
+            Types::Vector(ref matrices) => {
+                let mut acc: Vec<Types> = vec![];
+
+                for (key, value) in (**h).iter() {
+                    acc.push(Types::String(key.to_string()));
+                    acc.push(value.clone());
+                }
+
+                for pair in matrices.iter() {
+                    match pair {
+                        Types::Vector(ref v) => {
+                            for t in v.iter() {
+                                acc.push(t.clone())
+                            }
+                        }
+                        _ => panic!("unexpected type"),
+                    }
+                }
+
+                vec_to_hash(acc)
+            }
+            _ => panic!("can only use vectors for args"),
+        },
+        _ => panic!("Into only supports hashmaps for the moment"),
+    }
+}
+
+pub fn assoc(args: &VArgs) -> Types {
+    match args[0] {
+        Types::Hash(ref h) => {
+            let mut acc: Vec<Types> = vec![];
+
+            for (key, value) in (**h).iter() {
+                acc.push(Types::String(key.to_string()));
+                acc.push(value.clone());
+            }
+
+            for t in args[1..].iter() {
+                acc.push(t.clone())
+            }
+
+            vec_to_hash(acc)
+        }
+        _ => panic!("Into only supports hashmaps for the moment"),
+    }
 }
 
 pub fn list(args: &VArgs) -> Types {
