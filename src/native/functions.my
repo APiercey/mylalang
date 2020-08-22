@@ -53,3 +53,6 @@
 ; I just defined this simply because I wanted
 ; a function to play with :) 
 (def double (fn [i] (+ i i)))
+
+(def expi (fn [i] 
+  (expi (inspect (+ 1 i)))))

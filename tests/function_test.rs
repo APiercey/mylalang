@@ -19,7 +19,7 @@ fn test_anonymous_functions() {
 }
 
 #[test]
-fn test_functions_with_multiexpression_bodies() {
+fn test_functions_with_multi_expression_bodies() {
     {
         let program = "
             (def multi_body (fn [i]

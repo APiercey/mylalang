@@ -69,7 +69,7 @@ impl Types {
 
                 func.apply(args)
             }
-            _ => panic!("No apply"),
+            _ => panic!("No apply Err. no 1"),
         };
     }
 
@@ -94,7 +94,7 @@ impl Types {
                 }
                 _ => panic!("Expected a list of parameters"),
             },
-            _ => panic!("No apply"),
+            _ => panic!("No apply Err.no 2"),
         }
     }
 
@@ -119,7 +119,7 @@ impl Types {
                 }
                 _ => panic!("Expected a list of parameters"),
             },
-            _ => panic!("No apply"),
+            _ => panic!("No apply. Err. no 3"),
         }
     }
 
