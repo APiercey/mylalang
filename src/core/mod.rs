@@ -76,7 +76,6 @@ pub fn load(env: &Env) {
 
     set_env(&env, "into", define_function(|args: VArgs| into(&args)));
     set_env(&env, "assoc", define_function(|args: VArgs| assoc(&args)));
-
     set_env(&env, "list", define_function(|args: VArgs| list(&args)));
 
     set_env(&env, "head", define_function(|args: VArgs| head(&args[0])));

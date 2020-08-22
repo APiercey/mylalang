@@ -59,6 +59,7 @@ pub fn empty(item: &Types) -> Types {
         Types::String(s) => Types::Bool(s.as_str().len() == 0),
         Types::Vector(v) => Types::Bool(v.len() == 0),
         Types::List(l) => Types::Bool(l.len() == 0),
+        Types::Hash(h) => Types::Bool(h.is_empty()),
         a => panic!("Cannot check if {:?} is empty", a),
     };
 }
