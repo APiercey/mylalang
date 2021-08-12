@@ -2,3 +2,8 @@
 
 ; Map is implicitly imported from the environment
 (map shifter [8 23 16])
+(def map (fn [f coll]
+  (let [h (f (head coll))
+        t (tail coll)]
+          (: h (if (empty? t) t (map f t))))))
+
