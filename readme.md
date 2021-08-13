@@ -127,7 +127,7 @@ thread 'main' panicked at '"a" does not exist within this scope
 # oops :)
 ```
 
-## Defining variables
+## Binding values
 The `def` keyword allows bind a value (and functions but more on that later) to a name:
 
 Variables 
@@ -201,7 +201,6 @@ Passing functions as values
 => The value of the applied function is: 42
 ```
 
-
 ### Local binding in a function using `let`
 It is possible to bind local scoped variables to a function using the `let` keyword. This keyword functions the same as `def` but can only be used within a function.
 
@@ -227,6 +226,22 @@ In the example above, `x` equals the value if `i` multiplied by `i`.
 (shifter 23)
 => Final value is 483
 ```
+
+### Aliasing
+Because functions are actually values, it is possible to bind a named value to _another_ name. The is useful to alias functions.
+
+```clojure
+(def hey (fn [] (inspect "Hey")))
+=> <#def "hey">
+
+(def sayhey hey)
+=> <#def "sayhey">
+
+(sayhey)
+Hey
+=> Hey
+```
+
 ## Inspecting
 Mylalang lets you inspect a value and pass it through to calling functions.
 
@@ -264,6 +279,23 @@ foo bar
 => 123
 ```
 
+## Conditionals
+There are two conditional statements:
+- `if`, which when given a true statement returns (or executes) the left value. When false, the right value.
+- `unless`, which when given a false statement returns (or executes) the left value. When true, the right value.
+
+```clojure
+(if (< 1 10) "One is lower than ten" "Something is fishy..")
+
+=> One is lower than ten
+```
+
+```clojure
+(unless (= 8 8) "We've broken math" "8 always equals 8")
+
+=> 8 always equals 8
+```
+
 ## Importing
 Importing named valued (bound through `def`) in another file is possible using the `import` function, which binds the imported functions to named in the local scope.
 
@@ -279,4 +311,22 @@ Importing named valued (bound through `def`) in another file is possible using t
 (double 99)
 
 => 198
+```
+
+## Recursion and Loops
+Recusion is used for looping in Mylang.
+
+Example of a function using recursion create a loop with an exit condition
+```clojure
+(def start 0)
+
+(def inc (fn [i] 
+  (+ i 1)))
+
+(def loop (fn [i] 
+  (if (<= i 10) 
+    (loop (inc (inspect i)))
+    (inspect "finished"))))
+
+(loop start)
 ```
