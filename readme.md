@@ -130,7 +130,6 @@ thread 'main' panicked at '"a" does not exist within this scope
 ## Binding values
 The `def` keyword allows bind a value (and functions but more on that later) to a name:
 
-Variables 
 ```clojure
 (def a 23)
 => <#def "a">
