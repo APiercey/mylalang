@@ -201,3 +201,27 @@ Passing functions as values
 => The value of the applied function is: 42
 ```
 
+### Local binding in a function using `let`
+It is possible to bind local scoped variables to a function using the `let` keyword. This keyword functions the same as `def` but can only be used within a function.
+
+`let` is a function which takes a `list` and binds the name in the first position to a value in the second position of each pair in the list.
+
+```clojure
+# This example needs to be compressed into a single line to execute correctly in the REPL.
+
+(def shifter (fn [i]
+  (let [x (* i i)
+        y (+ i i)
+        z (if (> x 50) (- x y) (+ x y))]
+    (+ "Final value is " z))))
+    
+=> <#def "shifter">
+```
+
+In the example above, `x` equals the value if `i` multiplied by `i`.
+
+```clojure
+(shifter 23)
+=> Final value is 483
+```
+
