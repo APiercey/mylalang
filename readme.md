@@ -1,6 +1,6 @@
 # Mylalang
 
-Mylalang is a LISP implemented in Rust.
+[Mylalang](https://github.com/APiercey/mylalang) is a LISP implemented in Rust.
 
 ## Usage
 Firstly, clone the repo to a local directory
