@@ -201,10 +201,13 @@ Passing functions as values
 => The value of the applied function is: 42
 ```
 
+
 ### Local binding in a function using `let`
 It is possible to bind local scoped variables to a function using the `let` keyword. This keyword functions the same as `def` but can only be used within a function.
 
-`let` is a function which takes a `list` and binds the name in the first position to a value in the second position of each pair in the list.
+`let` is a function which takes multiple arguments. The first is `list` of name and value pairs and binds the name in the first position to a value in the second position of each pair in the list. 
+
+The remaining arguments can be function calls with the last function to return a value. This is used when you want to execute side effects or inspect a result.
 
 ```clojure
 # This example needs to be compressed into a single line to execute correctly in the REPL.
@@ -224,4 +227,56 @@ In the example above, `x` equals the value if `i` multiplied by `i`.
 (shifter 23)
 => Final value is 483
 ```
+## Inspecting
+Mylalang lets you inspect a value and pass it through to calling functions.
 
+Inspecting simple results
+```clojure
+(inspect "This is an inspection!")
+
+This is an inspection!
+=> This is an inspection!
+```
+
+The output in a REPL shows a printed result and then shows the value of the executed statement.
+
+Using inspect inside a function
+```clojure
+(def suspiciousfunction (fn [a]
+  (let [r (* a a)]
+    (inspect (+ "Result is strange... " r))
+    r)))
+```
+
+## Do function
+The `do` function lets you execute multiple functions without the need of a `let` function. It's used when you want to execute side effects but have no need for `let` local bindings.
+
+```clojure
+(def saygarbage (fn [a]
+  (do (inspect "Hello world")
+      (inspect "foo bar")
+      a)))
+
+=> <#def "saygarbage">
+(saygarbage "123")
+Hello world
+foo bar
+=> 123
+```
+
+## Importing
+Importing named valued (bound through `def`) in another file is possible using the `import` function, which binds the imported functions to named in the local scope.
+
+```clojure
+# math.my
+(def double (fn [a] (* a 2)))
+
+# main.my
+(import "math.my")
+
+=> <#def "double"> 
+
+(double 99)
+
+=> 198
+```
