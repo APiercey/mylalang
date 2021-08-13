@@ -113,18 +113,18 @@ Less then or equal to
 ```
 
 ## Comments
-Comments start with `#`
+Comments start with `;`
 ```clojure
-# This is a comment!
+; This is a comment!
 
-# This code does not execute
-# (def a "123")
+; This code does not execute
+; (def a "123")
 
 a
 
 thread 'main' panicked at '"a" does not exist within this scope
 
-# oops :)
+; oops :)
 ```
 
 ## Binding values
@@ -330,3 +330,14 @@ Example of a function using recursion create a loop with an exit condition
 
 (loop start)
 ```
+
+
+## Native functions
+Most functions covered are implemented or aliased using Mylalang itself. There are additional examples such as:
+- `apply`
+- `foldl`
+- `foldr`
+- `min`
+- `max`
+
+and more, which exist in the language. They can be found by checking out the native [implementation files](https://github.com/APiercey/mylalang/tree/master/src/native)
