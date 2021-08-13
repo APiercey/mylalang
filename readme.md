@@ -331,7 +331,6 @@ Example of a function using recursion create a loop with an exit condition
 (loop start)
 ```
 
-
 ## Native functions
 Most functions covered are implemented or aliased using Mylalang itself. There are additional examples such as:
 - `apply`
