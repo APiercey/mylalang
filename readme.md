@@ -2,6 +2,29 @@
 
 [Mylalang](https://github.com/APiercey/mylalang) is a LISP implemented in Rust.
 
+## Content
+- [Mylalang](#mylalang)
+  * [Usage](#usage)
+    + [Interactive REPL](#interactive-repl)
+    + [Interpreter](#interpreter)
+  * [Types](#types)
+  * [Arithmetic Operators](#arithmetic-operators)
+    + [List Processing](#list-processing)
+  * [Relational Operators](#relational-operators)
+  * [Comments](#comments)
+  * [Binding values](#binding-values)
+  * [Functions](#functions)
+    + [Named Functions](#named-functions)
+    + [Anonmymous Functions](#anonmymous-functions)
+    + [Local binding in a function using `let`](#local-binding-in-a-function-using--let-)
+    + [Aliasing](#aliasing)
+  * [Inspecting](#inspecting)
+  * [Do function](#do-function)
+  * [Conditionals](#conditionals)
+  * [Importing](#importing)
+  * [Recursion and Loops](#recursion-and-loops)
+  * [Native functions](#native-functions)
+
 ## Usage
 Firstly, clone the repo to a local directory
 ```bash
@@ -22,6 +45,16 @@ The REPL can be started by running:
 ```bash
 cargo run --bin imy
 ```
+
+## Types
+Only primitive types exist in Mylalang. Constructing types does not exist.
+
+- `Integer`s written like `1` or `1042`.
+- `Float`s written like `89.353`.
+- `String`s written like "This is a string!" or "Hello, world."
+- `Null` written as `nil`.
+- `List`s written as `[]` contain other types, written like `[2 23 88]` or `["mixed list" 823.45 "containing different" 90 "types" nil]`
+- `Function`s wrtten as `(fn [arg1 arg2 ...argN])`. More about this under the functions section.
 
 ## Arithmetic Operators
 Addiiton
