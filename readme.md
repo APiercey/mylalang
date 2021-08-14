@@ -16,7 +16,7 @@
   * [Functions](#functions)
     + [Named Functions](#named-functions)
     + [Anonmymous Functions](#anonmymous-functions)
-    + [Local binding in a function using `let`](#local-binding-in-a-function-using--let-)
+    + [Local Binding](#local-binding)
     + [Aliasing](#aliasing)
   * [Inspecting](#inspecting)
   * [Do function](#do-function)
@@ -233,7 +233,7 @@ Passing functions as values
 => The value of the applied function is: 42
 ```
 
-### Local binding in a function using `let`
+### Local Binding
 It is possible to bind local scoped variables to a function using the `let` keyword. This keyword functions the same as `def` but can only be used within a function.
 
 `let` is a function which takes multiple arguments. The first is `list` of name and value pairs and binds the name in the first position to a value in the second position of each pair in the list. 
@@ -259,8 +259,8 @@ In the example above, `x` equals the value if `i` multiplied by `i`.
 => Final value is 483
 ```
 
-### Aliasing
-Because functions are actually values, it is possible to bind a named value to _another_ name. The is useful to alias functions.
+## Aliasing
+Because all types - including functions - are just values, it is possible to bind a name to _another_ name using `def`. 
 
 ```clojure
 (def hey (fn [] (inspect "Hey")))
@@ -272,6 +272,12 @@ Because functions are actually values, it is possible to bind a named value to _
 (sayhey)
 Hey
 => Hey
+
+(def no_i_made_this "A very fancy string")
+=> <#def "no_i_made_this">
+
+(inspect no_i_made_this)
+=> "A very fancy string"
 ```
 
 ## Inspecting
