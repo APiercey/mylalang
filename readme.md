@@ -2,6 +2,7 @@
 
 [Mylalang](https://github.com/APiercey/mylalang) is a LISP implemented in Rust.
 
+# TODO: Document head and tail
 ## Content
 - [Content](#content)
 - [Usage](#usage)
@@ -33,11 +34,10 @@
 - [Evaluating Code](#evaluating-code)
   * [Complex Example](#complex-example)
 - [Native functions](#native-functions)
-  * [`foldl`](#-foldl-)
-  * [`foldr`](#-foldr-)
   * [`min`](#-min-)
   * [`max`](#-max-)
   * [`double`](#-double-)
+  * [`reduce`](#-reduce-)
   * [`map`](#-map-)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
@@ -537,25 +537,6 @@ A more complex example when you would want to eval code, is when the code is in 
 ## Native functions
 Most functions covered are implemented Mylalang itself. While there is no standard library, there are additional functions which come with Mylalang:
 
-### `foldl`
-_Note: This is an incorrect implementation. It should accept a list. Will be fixed in later versions._
-
-Reduces an array of values to the left. Accepts a function in it's first position, accumulator in it's second.
-```clojure
-(foldl + 0 [1 2 3 4])
-
-10
-```
-### `foldr`
-_Note: This is an incorrect implementation. It should accept a list. Will be fixed in later versions._
-
-Reduces a list of values to the right. Accepts a function in it's first position, accumulator in it's second.
-```clojure
-(foldr + 0 [1 2 3 4])
-
-10
-```
-
 ### `min`
 Returns the smallest value from a list.
 
@@ -590,6 +571,14 @@ The `map` function maps a function over a list. Accepts a function as its first 
 (map double 1 2 3 4 5)
 
 => ([2, 4, 6, 8, 10])
+```
+
+### `reduce`
+Reduces a list of values to the right. Accepts a function in it's first position, accumulator in it's second. The rest of the arguments are captured.
+```clojure
+(reduce + 0 1 2 3 4)
+
+=> 10
 ```
 
 More functions exist in the language which can be found by checking out the native [implementation files](https://github.com/APiercey/mylalang/tree/master/src/native).
