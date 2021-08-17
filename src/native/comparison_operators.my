@@ -1,0 +1,7 @@
+(def = eq?)
+(def > gt?)
+(def < lt?)
+(def gt_or_eq? (fn [a b] (or (> a b) (= a b))))
+(def lt_or_eq? (fn [a b] (or (< a b) (= a b))))
+(def >= gt_or_eq?)
+(def <= lt_or_eq?)

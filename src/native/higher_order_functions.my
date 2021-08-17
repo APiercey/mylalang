@@ -1,0 +1,13 @@
+(def foldl (fn [f acc coll]
+  (if (empty? coll) acc
+    (foldl f (f acc (head coll)) (tail coll)))))
+
+(def foldr (fn [f acc coll]
+  (if (empty? coll) acc
+    (f (foldr f acc (tail coll)) (head coll)))))
+
+(def map (fn [f a] (list (f a))))
+(def map (fn [f a & rest]
+   (cons (f a) (apply map f rest))))
+
+(def foldl (fn [f a] a)

@@ -1,0 +1,18 @@
+(def + (fn [] 0))
+(def + (fn [a] a))
+(def + (fn [a b] (add a b)))
+(def + (fn [a b & rest] (apply + (+ a b) rest)))
+
+(def - (fn [] 0))
+(def - (fn [a] (* a -1)))
+(def - (fn [a b] (subtract a b)))
+(def - (fn [a b & rest] (apply - (- a b) rest)))
+
+(def * (fn [] 1))
+(def * (fn [a] a))
+(def * (fn [a b] (multiply a b)))
+(def * (fn [a b & rest] (apply * (* a b) rest)))
+
+(def / (fn [a] a))
+(def / (fn [a b] (divide a b)))
+(def / (fn [a b & rest] (apply / (/ a b) rest)))
