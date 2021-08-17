@@ -39,7 +39,6 @@
   * [`max`](#-max-)
   * [`double`](#-double-)
   * [`map`](#-map-)
-  * [`eval`](#-eval-)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -592,6 +591,5 @@ The `map` function maps a function over a list. Accepts a function as its first 
 
 => ([2, 4, 6, 8, 10])
 ```
-### `eval` 
 
 More functions exist in the language which can be found by checking out the native [implementation files](https://github.com/APiercey/mylalang/tree/master/src/native).
