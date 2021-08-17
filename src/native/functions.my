@@ -50,6 +50,10 @@
   (if (empty? coll) acc
     (f (foldr f acc (tail coll)) (head coll)))))
 
-; I just defined this simply because I wanted
+; I only defined this simply because I wanted
 ; a function to play with :) 
 (def double (fn [i] (+ i i)))
+
+(def map (fn [f a] (list (f a))))
+(def map (fn [f a & rest]
+   (cons (f a) (apply map f rest))))
